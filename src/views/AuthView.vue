@@ -1,7 +1,7 @@
 <template>
   <div>
-    <AuthLogin v-if="isLogin" @switch-to-signup="isLogin = false" />
-    <AuthSignup v-else @switch-to-login="isLogin = true" />
+    <AuthLogin v-if="isLogin" @switchToSignup="isLogin = false" />
+    <AuthSignup v-else @switchToLogin="isLogin = true" />
   </div>
 </template>
 

@@ -153,7 +153,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { marked } from "marked";
 import { useNotesStore } from "../stores/notes";
-import { Note } from "../services/aiProvider";
+import { type Note } from "../services/aiProvider";
 
 const router = useRouter();
 const notesStore = useNotesStore();

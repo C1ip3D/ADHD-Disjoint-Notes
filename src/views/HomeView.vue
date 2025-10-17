@@ -11,16 +11,16 @@
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <router-link
-            to="/editor"
-            class="px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-lg font-semibold shadow-lg"
+            to="/auth"
+            class="px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-lg font-semibold shadow-lg inline-block"
           >
-            Start Taking Notes
+            <span class="text-black">Start Taking Notes</span>
           </router-link>
           <router-link
-            to="/notes"
-            class="px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-50 transition-colors text-lg font-semibold shadow-lg border border-primary-200"
+            to="/auth"
+            class="px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-50 transition-colors text-lg font-semibold shadow-lg border-2 border-primary-600 inline-block"
           >
-            View Your Notes
+            <span class="text-primary-600">View Your Notes</span>
           </router-link>
         </div>
       </div>
@@ -118,10 +118,10 @@
           Start taking notes and let AI help you find the connections you missed.
         </p>
         <router-link
-          to="/editor"
-          class="inline-flex items-center px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-50 transition-colors text-lg font-semibold shadow-lg"
+          to="/auth"
+          class="inline-flex items-center px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-50 transition-colors text-lg font-semibold shadow-lg border-2 border-white"
         >
-          Get Started Now
+          <span class="text-primary-600 font-bold">Get Started Now</span>
         </router-link>
       </div>
     </div>

@@ -2,10 +2,14 @@
   <div class="max-w-4xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <!-- Header -->
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Take Notes</h1>
-        <div class="flex items-center space-x-4">
-          <SubjectSelector v-model="selectedSubject" />
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Take Notes</h1>
+
+        <!-- Subject Detection -->
+        <SubjectSelector v-model:selectedSubject="selectedSubject" :noteContent="noteContent" />
+
+        <div class="flex items-center justify-between mt-4">
+          <div></div>
           <button
             @click="togglePreview"
             class="px-4 py-2 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors"

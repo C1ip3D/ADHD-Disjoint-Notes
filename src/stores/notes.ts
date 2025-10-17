@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { Note } from "../services/aiProvider";
+import { type Note } from "../services/aiProvider";
 import { useAuthStore } from "./auth";
 
 export const useNotesStore = defineStore("notes", () => {

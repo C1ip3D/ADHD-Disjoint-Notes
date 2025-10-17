@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { AIProvider, Note, ProcessedNote } from "./aiProvider";
+import { AIProvider, type Note, type ProcessedNote } from "./aiProvider";
 
 export class OpenAIProvider extends AIProvider {
   private openai: OpenAI;
