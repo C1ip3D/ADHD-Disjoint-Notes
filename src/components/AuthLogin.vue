@@ -96,11 +96,11 @@
           <button
             type="submit"
             :disabled="authStore.loading"
-            class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-lg text-black bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <span v-if="authStore.loading" class="flex items-center text-white">
+            <span v-if="authStore.loading" class="flex items-center text-black">
               <svg
-                class="animate-spin -ml-1 mr-3 h-6 w-6 text-white"
+                class="animate-spin -ml-1 mr-3 h-6 w-6 text-black"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -119,9 +119,9 @@
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span class="text-white">Signing in...</span>
+              <span class="text-black">Signing in...</span>
             </span>
-            <span v-else class="text-white font-semibold">Sign in</span>
+            <span v-else class="text-black font-semibold">Sign in</span>
           </button>
         </div>
       </form>
@@ -149,10 +149,30 @@ const form = reactive({
 
 async function handleSubmit() {
   try {
+    console.log("🔐 Attempting to sign in...");
+    alert("Starting sign in...");
+
     await authStore.signIn(form.email, form.password);
-    router.push("/");
-  } catch (error) {
-    // Error is handled by the store
+
+    console.log("✅ Sign in successful! User:", authStore.user?.email);
+    console.log("✅ isAuthenticated:", authStore.isAuthenticated);
+    alert(`Sign in successful! User: ${authStore.user?.email}, Auth: ${authStore.isAuthenticated}`);
+
+    // Wait a moment for auth state to propagate
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    console.log("🚀 Navigating to /editor...");
+    // Redirect to editor page after successful login
+    await router.push("/editor");
+    console.log("✅ Navigation complete");
+    alert("Navigation complete!");
+  } catch (error: any) {
+    console.error("❌ Sign in error:", error);
+    alert(`Sign in ERROR: ${error.message}`);
+    // Error is handled by the store, but also show alert for debugging
+    if (!authStore.error) {
+      authStore.error = error.message || "Failed to sign in. Check console for details.";
+    }
   }
 }
 

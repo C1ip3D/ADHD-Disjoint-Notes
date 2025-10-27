@@ -28,10 +28,11 @@ export const useNotesStore = defineStore("notes", () => {
   const notesBySubject = computed(() => {
     const grouped: Record<string, Note[]> = {};
     notes.value.forEach((note) => {
-      if (!grouped[note.subject]) {
-        grouped[note.subject] = [];
+      const subject = note.subject || "General";
+      if (!grouped[subject]) {
+        grouped[subject] = [];
       }
-      grouped[note.subject].push(note);
+      grouped[subject].push(note);
     });
     return grouped;
   });
@@ -108,7 +109,7 @@ export const useNotesStore = defineStore("notes", () => {
 
       const index = notes.value.findIndex((note) => note.id === id);
       if (index !== -1) {
-        notes.value[index] = { ...notes.value[index], ...updates };
+        notes.value[index] = { ...notes.value[index], ...updates } as Note;
       }
     } catch (err) {
       error.value = "Failed to update note";

@@ -130,7 +130,7 @@
         <div>
           <button
             type="submit"
-            :disabled="authStore.loading || passwordMismatch"
+            :disabled="!!(authStore.loading || passwordMismatch)"
             class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <span v-if="authStore.loading" class="flex items-center text-white">
@@ -165,11 +165,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 
-const emit = defineEmits<{
+defineEmits<{
   switchToLogin: [];
 }>();
 
@@ -192,10 +192,17 @@ async function handleSubmit() {
   if (passwordMismatch.value) return;
 
   try {
+    console.log("📝 Attempting to create account...");
     await authStore.signUp(form.email, form.password, form.displayName || undefined);
-    router.push("/");
-  } catch (error) {
-    // Error is handled by the store
+    console.log("✅ Account created successfully!");
+    // Redirect to editor page after successful signup
+    router.push("/editor");
+  } catch (error: any) {
+    console.error("❌ Sign up error:", error);
+    // Error is handled by the store, but also show alert for debugging
+    if (!authStore.error) {
+      authStore.error = error.message || "Failed to create account. Check console for details.";
+    }
   }
 }
 </script>

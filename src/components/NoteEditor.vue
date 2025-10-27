@@ -1,85 +1,172 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <!-- Header -->
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Take Notes</h1>
-
-        <!-- Subject Detection -->
-        <SubjectSelector v-model:selectedSubject="selectedSubject" :noteContent="noteContent" />
-
-        <div class="flex items-center justify-between mt-4">
-          <div></div>
-          <button
-            @click="togglePreview"
-            class="px-4 py-2 bg-primary-100 text-primary-700 rounded-lg hover:bg-primary-200 transition-colors"
+  <div class="max-w-6xl mx-auto p-6 space-y-6">
+    <!-- Header Section -->
+    <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h1
+            class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
           >
-            {{ showPreview ? "Edit" : "Preview" }}
-          </button>
+            Create Note
+          </h1>
+          <p class="text-gray-500 text-sm mt-1">Capture your thoughts with text or images</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- View Toggle -->
+          <div class="flex bg-gray-100 rounded-xl p-1">
+            <button
+              @click="activeTab = 'write'"
+              :class="[
+                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                activeTab === 'write'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900',
+              ]"
+            >
+              Write
+            </button>
+            <button
+              @click="activeTab = 'image'"
+              :class="[
+                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                activeTab === 'image'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900',
+              ]"
+            >
+              Image
+            </button>
+            <button
+              @click="activeTab = 'preview'"
+              :class="[
+                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                activeTab === 'preview'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900',
+              ]"
+            >
+              Preview
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Editor/Preview -->
-      <div class="mb-4">
-        <div v-if="!showPreview" class="space-y-4">
-          <textarea
-            v-model="noteContent"
-            @input="autoSave"
-            placeholder="Start typing your notes here... You can use markdown formatting."
-            class="w-full h-96 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none font-mono text-sm"
-          />
-        </div>
-        <div v-else class="prose max-w-none">
-          <div
-            v-html="renderedMarkdown"
-            class="p-4 border border-gray-300 rounded-lg min-h-96 bg-gray-50"
-          ></div>
-        </div>
+      <!-- Subject Selector -->
+      <SubjectSelector v-model:selectedSubject="selectedSubject" :noteContent="noteContent" />
+    </div>
+
+    <!-- Editor Area -->
+    <div
+      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden"
+    >
+      <!-- Text Editor Tab -->
+      <div v-show="activeTab === 'write'" class="p-6">
+        <textarea
+          v-model="noteContent"
+          @input="autoSave"
+          placeholder="Start typing your notes here... You can use markdown formatting.
+
+# Heading 1
+## Heading 2
+**bold** *italic*
+- List item
+1. Numbered list
+[Link](url)"
+          class="w-full h-[500px] p-6 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-base transition-all"
+          style="outline: none"
+        />
       </div>
 
-      <!-- Status and Actions -->
-      <div class="flex items-center justify-between">
-        <div class="text-sm text-gray-500">
-          <span v-if="isSaving" class="flex items-center">
+      <!-- Image Upload Tab -->
+      <div v-show="activeTab === 'image'" class="p-6">
+        <MobileImageUpload v-if="isNativePlatform" @text-extracted="handleTextExtracted" />
+        <ImageUpload v-else @text-extracted="handleTextExtracted" />
+      </div>
+
+      <!-- Preview Tab -->
+      <div v-show="activeTab === 'preview'" class="p-6">
+        <div
+          v-if="noteContent.trim()"
+          v-html="renderedMarkdown"
+          class="prose prose-lg max-w-none p-6 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-2xl min-h-[500px] border-2 border-gray-200"
+        ></div>
+        <div v-else class="flex items-center justify-center h-[500px] text-gray-400">
+          <div class="text-center">
             <svg
-              class="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-500"
-              xmlns="http://www.w3.org/2000/svg"
+              class="w-16 h-16 mx-auto mb-4"
               fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
               <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               ></path>
             </svg>
+            <p class="text-lg font-medium">Nothing to preview yet</p>
+            <p class="text-sm mt-1">Start writing to see a preview</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-4 border border-gray-200/50">
+      <div class="flex items-center justify-between">
+        <!-- Status -->
+        <div class="text-sm text-gray-600">
+          <span v-if="isSaving" class="flex items-center gap-2">
+            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
             Saving...
           </span>
-          <span v-else-if="lastSaved" class="text-green-600">
+          <span v-else-if="lastSaved" class="flex items-center gap-2 text-green-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Saved {{ formatTime(lastSaved) }}
+          </span>
+          <span v-else class="flex items-center gap-2 text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            Auto-save enabled
           </span>
         </div>
 
-        <div class="flex space-x-2">
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
           <button
             @click="clearNote"
-            class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+            class="px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-medium"
           >
             Clear
           </button>
           <button
-            @click="saveNote"
+            @click="() => saveNote(false)"
             :disabled="!noteContent.trim()"
-            class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
           >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
             Save Note
           </button>
         </div>
@@ -91,17 +178,21 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { marked } from "marked";
+import { Capacitor } from "@capacitor/core";
 import { useNotesStore } from "../stores/notes";
 import SubjectSelector from "./SubjectSelector.vue";
+import ImageUpload from "./ImageUpload.vue";
+import MobileImageUpload from "./MobileImageUpload.vue";
 
 const notesStore = useNotesStore();
 
 const noteContent = ref("");
 const selectedSubject = ref("General");
-const showPreview = ref(false);
+const activeTab = ref<"write" | "image" | "preview">("write");
 const isSaving = ref(false);
 const lastSaved = ref<Date | null>(null);
 const autoSaveTimeout = ref<NodeJS.Timeout | null>(null);
+const isNativePlatform = Capacitor.isNativePlatform();
 
 const renderedMarkdown = computed(() => {
   return marked(noteContent.value);
@@ -135,6 +226,7 @@ async function saveNote(isAutoSave = false) {
     if (!isAutoSave) {
       noteContent.value = "";
       lastSaved.value = null;
+      activeTab.value = "write";
     } else {
       lastSaved.value = new Date();
     }
@@ -146,12 +238,20 @@ async function saveNote(isAutoSave = false) {
 }
 
 function clearNote() {
-  noteContent.value = "";
-  lastSaved.value = null;
+  if (confirm("Are you sure you want to clear this note?")) {
+    noteContent.value = "";
+    lastSaved.value = null;
+  }
 }
 
-function togglePreview() {
-  showPreview.value = !showPreview.value;
+function handleTextExtracted(text: string) {
+  // Append extracted text to note content
+  if (noteContent.value) {
+    noteContent.value += "\n\n---\n\n" + text;
+  } else {
+    noteContent.value = text;
+  }
+  activeTab.value = "write";
 }
 
 function formatTime(date: Date): string {

@@ -1,7 +1,7 @@
 <template>
-  <MergeViewer />
+  <SimplifiedNotesViewer />
 </template>
 
 <script setup lang="ts">
-import MergeViewer from "../components/MergeViewer.vue";
+import SimplifiedNotesViewer from "../components/SimplifiedNotesViewer.vue";
 </script>

@@ -23,6 +23,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   // Initialize auth state listener
   onAuthStateChanged(auth, (firebaseUser) => {
+    console.log("🔄 Auth state changed:", firebaseUser ? `User: ${firebaseUser.email}` : "No user");
     user.value = firebaseUser;
     loading.value = false;
   });
@@ -52,13 +53,24 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
+      console.log("🔐 Calling Firebase signInWithEmailAndPassword...");
+      console.log("📧 Email:", email);
+      console.log("🔑 Password length:", password.length);
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      console.log("✅ Firebase sign-in successful:", userCredential.user.email);
+      console.log("✅ User UID:", userCredential.user.uid);
       return userCredential.user;
     } catch (err: any) {
-      error.value = getAuthErrorMessage(err.code);
+      console.error("❌ Firebase sign-in failed:", err);
+      console.error("❌ Error code:", err.code);
+      console.error("❌ Error message:", err.message);
+      error.value = getAuthErrorMessage(err.code) || err.message;
       throw err;
     } finally {
       loading.value = false;
+      console.log("🏁 Sign-in process complete");
     }
   }
 

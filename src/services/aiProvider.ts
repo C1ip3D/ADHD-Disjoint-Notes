@@ -11,6 +11,18 @@ export interface ProcessedNote {
   connections: string[];
   gaps: string[];
   suggestions: string[];
+  keyPoints?: string[];
+  mainIdeas?: string;
+  examples?: string[];
+  practiceProblems?: string[];
+  quizQuestions?: QuizQuestion[];
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
 }
 
 export abstract class AIProvider {
