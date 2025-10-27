@@ -1,19 +1,21 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6 space-y-6">
-    <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
-      <div class="flex items-center justify-between">
+  <div class="max-w-6xl mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+    <div
+      class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 border border-gray-200/50"
+    >
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
         <div>
-          <h1 class="text-4xl font-bold text-blue-600 mb-2">Your Notes</h1>
-          <p class="text-gray-600">
+          <h1 class="text-2xl sm:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">Your Notes</h1>
+          <p class="text-sm sm:text-base text-gray-600">
             {{ notesStore.notes.length }} notes • View, organize, and analyze
           </p>
         </div>
         <button
           v-if="notesStore.notes.length > 0"
           @click="clearAllNotes"
-          class="px-6 py-3 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all font-medium shadow-lg flex items-center gap-2 hover:scale-105"
+          class="px-4 sm:px-6 py-2 sm:py-3 bg-red-500 text-white rounded-xl sm:rounded-2xl hover:bg-red-600 transition-all font-medium shadow-lg flex items-center justify-center gap-2 hover:scale-105 text-sm sm:text-base"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -29,24 +31,31 @@
     <!-- Loading State -->
     <div
       v-if="loading"
-      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-12 border border-gray-200/50"
+      class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-12 border border-gray-200/50"
     >
       <div class="flex flex-col justify-center items-center">
         <div
-          class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-500"
+          class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-4 border-gray-200 border-t-blue-500"
         ></div>
-        <p class="text-gray-600 mt-4">Loading notes...</p>
+        <p class="text-sm sm:text-base text-gray-600 mt-4">Loading notes...</p>
       </div>
     </div>
 
     <!-- Error State -->
     <div
       v-else-if="error"
-      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-red-200"
+      class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 border border-red-200"
     >
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-red-100 rounded-2xl flex items-center justify-center">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div
+          class="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-xl sm:rounded-2xl flex items-center justify-center"
+        >
+          <svg
+            class="w-4 h-4 sm:w-5 sm:h-5 text-red-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -55,45 +64,59 @@
             ></path>
           </svg>
         </div>
-        <p class="text-red-800 font-medium">{{ error }}</p>
+        <p class="text-sm sm:text-base text-red-800 font-medium">{{ error }}</p>
       </div>
     </div>
 
     <!-- Notes by Subject -->
-    <div v-else-if="Object.keys(notesBySubject).length > 0" class="space-y-6">
+    <div v-else-if="Object.keys(notesBySubject).length > 0" class="space-y-4 sm:space-y-6">
       <div
         v-for="(subjectNotes, subject) in notesBySubject"
         :key="subject"
-        class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
+        class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
       >
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
-            <span class="w-4 h-4 rounded-full" :class="getSubjectColor(subject)"></span>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6"
+        >
+          <h2
+            class="text-lg sm:text-2xl font-bold text-gray-800 flex flex-wrap items-center gap-2 sm:gap-3"
+          >
+            <span
+              class="w-3 h-3 sm:w-4 sm:h-4 rounded-full"
+              :class="getSubjectColor(subject)"
+            ></span>
             {{ subject }}
-            <span class="ml-2 text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+            <span
+              class="text-xs sm:text-sm font-normal text-gray-500 bg-gray-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full"
+            >
               {{ subjectNotes.length }} notes
             </span>
             <span
               v-if="getSelectedCount(subject) > 0"
-              class="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full"
+              class="text-xs sm:text-sm font-semibold text-blue-600 bg-blue-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full"
             >
               {{ getSelectedCount(subject) }} selected
             </span>
           </h2>
-          <div class="flex items-center gap-3">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
             <button
               v-if="getSelectedCount(subject) > 0"
               @click="clearSelection(subject)"
-              class="px-4 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-all font-medium"
+              class="px-3 sm:px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-all font-medium"
             >
               Clear Selection
             </button>
             <button
               @click="processSelectedNotes(subject)"
               :disabled="getSelectedCount(subject) === 0"
-              class="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              class="px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl sm:rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-medium shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-4 h-4 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -101,33 +124,42 @@
                   d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                 ></path>
               </svg>
-              {{
-                getSelectedCount(subject) === 0
-                  ? "Select Notes to Analyze"
-                  : `Analyze ${getSelectedCount(subject)} Notes`
-              }}
+              <span class="hidden sm:inline">
+                {{
+                  getSelectedCount(subject) === 0
+                    ? "Select Notes to Analyze"
+                    : `Analyze ${getSelectedCount(subject)} Notes`
+                }}
+              </span>
+              <span class="sm:hidden">
+                {{
+                  getSelectedCount(subject) === 0
+                    ? "Select to Analyze"
+                    : `Analyze ${getSelectedCount(subject)}`
+                }}
+              </span>
             </button>
           </div>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <div
             v-for="note in subjectNotes.slice(0, 6)"
             :key="note.id"
             @click="toggleNoteSelection(note.id)"
             :class="[
-              'group bg-gradient-to-br from-white to-gray-50 border-2 rounded-2xl p-5 hover:shadow-lg transition-all cursor-pointer',
+              'group bg-gradient-to-br from-white to-gray-50 border-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 hover:shadow-lg transition-all cursor-pointer',
               isNoteSelected(note.id)
                 ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
                 : 'border-gray-200 hover:border-blue-300',
             ]"
           >
             <!-- Selection Checkbox -->
-            <div class="flex items-start justify-between mb-3">
-              <div class="flex items-center gap-2">
+            <div class="flex items-start justify-between mb-2 sm:mb-3">
+              <div class="flex items-center gap-1.5 sm:gap-2">
                 <div
                   :class="[
-                    'w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all',
+                    'w-4 h-4 sm:w-5 sm:h-5 rounded-md sm:rounded-lg border-2 flex items-center justify-center transition-all',
                     isNoteSelected(note.id)
                       ? 'bg-blue-600 border-blue-600'
                       : 'border-gray-300 group-hover:border-blue-400',
@@ -135,7 +167,7 @@
                 >
                   <svg
                     v-if="isNoteSelected(note.id)"
-                    class="w-3 h-3 text-white"
+                    class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -148,15 +180,22 @@
                     ></path>
                   </svg>
                 </div>
-                <span class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded-lg">
+                <span
+                  class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg"
+                >
                   {{ formatDate(note.timestamp) }}
                 </span>
               </div>
               <button
                 @click.stop="deleteNote(note.id)"
-                class="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                class="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 p-1 sm:p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md sm:rounded-lg transition-all"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  class="w-3.5 h-3.5 sm:w-4 sm:h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -167,20 +206,27 @@
               </button>
             </div>
 
-            <div class="text-sm text-gray-700 line-clamp-3 leading-relaxed mb-4">
+            <div class="text-xs sm:text-sm text-gray-700 line-clamp-3 leading-relaxed mb-3 sm:mb-4">
               {{ note.content.substring(0, 150) }}{{ note.content.length > 150 ? "..." : "" }}
             </div>
 
-            <div class="flex items-center justify-between pt-3 border-t border-gray-200">
-              <span class="text-xs text-gray-500 font-medium px-2 py-1 bg-gray-100 rounded-lg">
+            <div class="flex items-center justify-between pt-2 sm:pt-3 border-t border-gray-200">
+              <span
+                class="text-xs text-gray-500 font-medium px-2 py-0.5 sm:py-1 bg-gray-100 rounded-md sm:rounded-lg"
+              >
                 {{ note.format }}
               </span>
               <button
                 @click.stop="viewNote(note)"
-                class="text-blue-600 hover:text-blue-700 text-sm font-semibold flex items-center gap-1"
+                class="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-semibold flex items-center gap-1"
               >
                 View
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  class="w-3 h-3 sm:w-4 sm:h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -193,9 +239,9 @@
           </div>
         </div>
 
-        <div v-if="subjectNotes.length > 6" class="mt-6 text-center">
+        <div v-if="subjectNotes.length > 6" class="mt-4 sm:mt-6 text-center">
           <button
-            class="text-blue-600 hover:text-blue-700 font-semibold px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors"
+            class="text-sm sm:text-base text-blue-600 hover:text-blue-700 font-semibold px-3 sm:px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors"
           >
             View {{ subjectNotes.length - 6 }} more notes
           </button>
@@ -206,10 +252,10 @@
     <!-- Empty State -->
     <div
       v-else
-      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-16 border border-gray-200/50"
+      class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-16 border border-gray-200/50"
     >
       <div class="text-center">
-        <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
+        <div class="w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-4 sm:mb-6 text-gray-300">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
@@ -219,13 +265,15 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-3xl font-bold text-gray-900 mb-3">No notes yet</h3>
-        <p class="text-gray-600 mb-8 text-lg">Start capturing your ideas and they'll appear here</p>
+        <h3 class="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">No notes yet</h3>
+        <p class="text-sm sm:text-lg text-gray-600 mb-6 sm:mb-8">
+          Start capturing your ideas and they'll appear here
+        </p>
         <router-link
           to="/editor"
-          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-semibold shadow-lg hover:shadow-xl gap-2 hover:scale-105"
+          class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl sm:rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-semibold shadow-lg hover:shadow-xl gap-2 hover:scale-105 text-sm sm:text-base"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -243,23 +291,32 @@
       <Transition name="modal">
         <div
           v-if="selectedNote"
-          class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50"
           @click.self="selectedNote = null"
         >
           <div
-            class="bg-white rounded-3xl max-w-3xl w-full max-h-[80vh] overflow-hidden shadow-2xl transform transition-all"
+            class="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full max-h-[90vh] sm:max-h-[80vh] overflow-hidden shadow-2xl transform transition-all"
           >
-            <div class="bg-gradient-to-r from-cyan-400 to-blue-500 px-8 py-6 text-white">
+            <div
+              class="bg-gradient-to-r from-cyan-400 to-blue-500 px-4 sm:px-8 py-4 sm:py-6 text-white"
+            >
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-2xl font-bold">{{ selectedNote.subject }}</h3>
-                  <p class="text-sm text-white/80 mt-1">{{ formatDate(selectedNote.timestamp) }}</p>
+                  <h3 class="text-lg sm:text-2xl font-bold">{{ selectedNote.subject }}</h3>
+                  <p class="text-xs sm:text-sm text-white/80 mt-1">
+                    {{ formatDate(selectedNote.timestamp) }}
+                  </p>
                 </div>
                 <button
                   @click="selectedNote = null"
-                  class="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                  class="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg sm:rounded-xl transition-colors"
                 >
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    class="w-5 h-5 sm:w-6 sm:h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -270,8 +327,8 @@
                 </button>
               </div>
             </div>
-            <div class="p-8 overflow-y-auto max-h-[60vh]">
-              <div class="prose prose-lg max-w-none" v-html="renderedNoteContent"></div>
+            <div class="p-4 sm:p-8 overflow-y-auto max-h-[calc(90vh-100px)] sm:max-h-[60vh]">
+              <div class="prose prose-sm sm:prose-lg max-w-none" v-html="renderedNoteContent"></div>
             </div>
           </div>
         </div>

@@ -1,19 +1,26 @@
 <template>
   <!-- Floating Chat Button -->
-  <div class="fixed bottom-6 right-6 z-50">
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
     <!-- Chat Window -->
     <Transition name="chat">
       <div
         v-if="isOpen"
-        class="mb-4 w-96 h-[600px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-blue-200"
+        class="mb-4 w-[calc(100vw-2rem)] sm:w-96 h-[500px] sm:h-[600px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border-2 border-blue-200"
       >
         <!-- Header -->
         <div
-          class="bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-4 text-white flex items-center justify-between"
+          class="bg-gradient-to-r from-cyan-400 to-blue-500 px-4 sm:px-6 py-3 sm:py-4 text-white flex items-center justify-between"
         >
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div
+              class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg sm:rounded-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 sm:w-6 sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -23,13 +30,13 @@
               </svg>
             </div>
             <div>
-              <h3 class="font-bold text-lg">AI Assistant</h3>
+              <h3 class="font-bold text-base sm:text-lg">AI Assistant</h3>
               <p class="text-xs text-white/80">Ask me anything!</p>
             </div>
           </div>
           <button
             @click="isOpen = false"
-            class="p-2 hover:bg-white/20 rounded-xl transition-colors"
+            class="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg sm:rounded-xl transition-colors"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -45,15 +52,15 @@
         <!-- Messages -->
         <div
           ref="messagesContainer"
-          class="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-br from-gray-50 to-blue-50"
+          class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gradient-to-br from-gray-50 to-blue-50"
         >
           <!-- Welcome Message -->
-          <div v-if="messages.length === 0" class="text-center py-8">
+          <div v-if="messages.length === 0" class="text-center py-4 sm:py-8">
             <div
-              class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center"
+              class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl sm:rounded-2xl flex items-center justify-center"
             >
               <svg
-                class="w-10 h-10 text-white"
+                class="w-8 h-8 sm:w-10 sm:h-10 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -66,24 +73,26 @@
                 ></path>
               </svg>
             </div>
-            <h4 class="font-bold text-gray-800 mb-2">Hi! I'm your AI Assistant</h4>
-            <p class="text-sm text-gray-600 mb-4">Ask me about:</p>
+            <h4 class="font-bold text-sm sm:text-base text-gray-800 mb-1 sm:mb-2">
+              Hi! I'm your AI Assistant
+            </h4>
+            <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Ask me about:</p>
             <div class="space-y-2">
               <button
                 @click="askQuestion('Summarize my recent notes')"
-                class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-sm text-left"
+                class="w-full px-3 sm:px-4 py-2 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-xs sm:text-sm text-left"
               >
                 Summarize my recent notes
               </button>
               <button
                 @click="askQuestion('What are the main topics I studied?')"
-                class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-sm text-left"
+                class="w-full px-3 sm:px-4 py-2 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-xs sm:text-sm text-left"
               >
                 What topics did I study?
               </button>
               <button
                 @click="askQuestion('Give me study tips for ADHD')"
-                class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-sm text-left"
+                class="w-full px-3 sm:px-4 py-2 bg-white border border-gray-200 rounded-lg sm:rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-xs sm:text-sm text-left"
               >
                 Study tips for ADHD
               </button>
@@ -95,19 +104,19 @@
             <!-- User Message -->
             <div v-if="message.role === 'user'" class="flex justify-end">
               <div
-                class="max-w-[80%] bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg"
+                class="max-w-[85%] bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl sm:rounded-2xl rounded-tr-sm px-3 sm:px-4 py-2 sm:py-3 shadow-lg"
               >
-                <p class="text-sm">{{ message.content }}</p>
+                <p class="text-xs sm:text-sm">{{ message.content }}</p>
               </div>
             </div>
 
             <!-- AI Message -->
             <div v-else class="flex justify-start">
               <div
-                class="max-w-[85%] bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-lg border border-gray-200"
+                class="max-w-[90%] bg-white rounded-xl sm:rounded-2xl rounded-tl-sm px-3 sm:px-4 py-2 sm:py-3 shadow-lg border border-gray-200"
               >
                 <div
-                  class="prose prose-sm max-w-none"
+                  class="prose prose-xs sm:prose-sm max-w-none"
                   v-html="renderMarkdown(message.content)"
                 ></div>
               </div>
@@ -116,15 +125,19 @@
 
           <!-- Loading -->
           <div v-if="isLoading" class="flex justify-start">
-            <div class="bg-white rounded-2xl px-6 py-4 shadow-lg border border-gray-200">
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+            <div
+              class="bg-white rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-lg border border-gray-200"
+            >
+              <div class="flex items-center gap-1.5 sm:gap-2">
                 <div
-                  class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce"
+                ></div>
+                <div
+                  class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce"
                   style="animation-delay: 0.1s"
                 ></div>
                 <div
-                  class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"
+                  class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-cyan-500 rounded-full animate-bounce"
                   style="animation-delay: 0.2s"
                 ></div>
               </div>
@@ -133,21 +146,26 @@
         </div>
 
         <!-- Input -->
-        <div class="p-4 bg-white border-t border-gray-200">
+        <div class="p-3 sm:p-4 bg-white border-t border-gray-200">
           <div class="flex items-end gap-2">
             <textarea
               v-model="inputMessage"
               @keydown.enter.prevent="sendMessage"
               placeholder="Ask me anything..."
               rows="2"
-              class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:outline-none resize-none text-sm"
+              class="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-blue-500 focus:outline-none resize-none text-xs sm:text-sm"
             ></textarea>
             <button
               @click="sendMessage"
               :disabled="!inputMessage.trim() || isLoading"
-              class="p-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl hover:from-cyan-500 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:scale-105"
+              class="p-2.5 sm:p-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-lg sm:rounded-xl hover:from-cyan-500 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:scale-105"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-4 h-4 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -164,9 +182,15 @@
     <!-- Chat Button -->
     <button
       @click="toggleChat"
-      class="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center justify-center group"
+      class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center justify-center group"
     >
-      <svg v-if="!isOpen" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        v-if="!isOpen"
+        class="w-6 h-6 sm:w-8 sm:h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -174,7 +198,13 @@
           d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
         ></path>
       </svg>
-      <svg v-else class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        v-else
+        class="w-6 h-6 sm:w-8 sm:h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -186,7 +216,7 @@
       <!-- Notification Badge -->
       <div
         v-if="!isOpen && hasUnread"
-        class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white"
+        class="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full border-2 border-white"
       ></div>
     </button>
   </div>
