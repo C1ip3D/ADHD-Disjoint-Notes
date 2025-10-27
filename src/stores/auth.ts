@@ -53,11 +53,21 @@ export const useAuthStore = defineStore("auth", () => {
     error.value = null;
 
     try {
-      console.log("🔐 Calling Firebase signInWithEmailAndPassword...");
+      console.log("📧 Calling Firebase signInWithEmailAndPassword...");
       console.log("📧 Email:", email);
-      console.log("🔑 Password length:", password.length);
+      console.log("📧 Password length:", password.length);
+      console.log("📧 Auth instance:", auth);
+      console.log("📧 Auth app name:", auth?.app?.name);
 
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      // Add a timeout to catch hanging requests
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Sign-in request timed out after 30 seconds")), 30000);
+      });
+
+      const signInPromise = signInWithEmailAndPassword(auth, email, password);
+
+      console.log("⏳ Waiting for Firebase response...");
+      const userCredential = (await Promise.race([signInPromise, timeoutPromise])) as any;
 
       console.log("✅ Firebase sign-in successful:", userCredential.user.email);
       console.log("✅ User UID:", userCredential.user.uid);
@@ -66,6 +76,7 @@ export const useAuthStore = defineStore("auth", () => {
       console.error("❌ Firebase sign-in failed:", err);
       console.error("❌ Error code:", err.code);
       console.error("❌ Error message:", err.message);
+      console.error("❌ Full error:", JSON.stringify(err, null, 2));
       error.value = getAuthErrorMessage(err.code) || err.message;
       throw err;
     } finally {

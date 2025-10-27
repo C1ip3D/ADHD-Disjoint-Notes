@@ -3,10 +3,10 @@
     <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            Your Notes
-          </h1>
-          <p class="text-gray-600">{{ notesStore.notes.length }} notes • View, organize, and analyze</p>
+          <h1 class="text-4xl font-bold text-blue-600 mb-2">Your Notes</h1>
+          <p class="text-gray-600">
+            {{ notesStore.notes.length }} notes • View, organize, and analyze
+          </p>
         </div>
         <button
           v-if="notesStore.notes.length > 0"
@@ -14,7 +14,12 @@
           class="px-6 py-3 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all font-medium shadow-lg flex items-center gap-2 hover:scale-105"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            ></path>
           </svg>
           Clear All Notes
         </button>
@@ -22,19 +27,32 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-12 border border-gray-200/50">
+    <div
+      v-if="loading"
+      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-12 border border-gray-200/50"
+    >
       <div class="flex flex-col justify-center items-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-500"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-500"
+        ></div>
         <p class="text-gray-600 mt-4">Loading notes...</p>
       </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-red-200">
+    <div
+      v-else-if="error"
+      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-red-200"
+    >
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-red-100 rounded-2xl flex items-center justify-center">
           <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
           </svg>
         </div>
         <p class="text-red-800 font-medium">{{ error }}</p>
@@ -55,7 +73,10 @@
             <span class="ml-2 text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
               {{ subjectNotes.length }} notes
             </span>
-            <span v-if="getSelectedCount(subject) > 0" class="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+            <span
+              v-if="getSelectedCount(subject) > 0"
+              class="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full"
+            >
               {{ getSelectedCount(subject) }} selected
             </span>
           </h2>
@@ -70,7 +91,7 @@
             <button
               @click="processSelectedNotes(subject)"
               :disabled="getSelectedCount(subject) === 0"
-              class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              class="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -80,7 +101,11 @@
                   d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                 ></path>
               </svg>
-              {{ getSelectedCount(subject) === 0 ? 'Select Notes to Analyze' : `Analyze ${getSelectedCount(subject)} Notes` }}
+              {{
+                getSelectedCount(subject) === 0
+                  ? "Select Notes to Analyze"
+                  : `Analyze ${getSelectedCount(subject)} Notes`
+              }}
             </button>
           </div>
         </div>
@@ -92,22 +117,35 @@
             @click="toggleNoteSelection(note.id)"
             :class="[
               'group bg-gradient-to-br from-white to-gray-50 border-2 rounded-2xl p-5 hover:shadow-lg transition-all cursor-pointer',
-              isNoteSelected(note.id) 
-                ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' 
-                : 'border-gray-200 hover:border-blue-300'
+              isNoteSelected(note.id)
+                ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                : 'border-gray-200 hover:border-blue-300',
             ]"
           >
             <!-- Selection Checkbox -->
             <div class="flex items-start justify-between mb-3">
               <div class="flex items-center gap-2">
-                <div :class="[
-                  'w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all',
-                  isNoteSelected(note.id) 
-                    ? 'bg-blue-600 border-blue-600' 
-                    : 'border-gray-300 group-hover:border-blue-400'
-                ]">
-                  <svg v-if="isNoteSelected(note.id)" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                <div
+                  :class="[
+                    'w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all',
+                    isNoteSelected(note.id)
+                      ? 'bg-blue-600 border-blue-600'
+                      : 'border-gray-300 group-hover:border-blue-400',
+                  ]"
+                >
+                  <svg
+                    v-if="isNoteSelected(note.id)"
+                    class="w-3 h-3 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      d="M5 13l4 4L19 7"
+                    ></path>
                   </svg>
                 </div>
                 <span class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded-lg">
@@ -156,7 +194,9 @@
         </div>
 
         <div v-if="subjectNotes.length > 6" class="mt-6 text-center">
-          <button class="text-blue-600 hover:text-blue-700 font-semibold px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors">
+          <button
+            class="text-blue-600 hover:text-blue-700 font-semibold px-4 py-2 hover:bg-blue-50 rounded-xl transition-colors"
+          >
             View {{ subjectNotes.length - 6 }} more notes
           </button>
         </div>
@@ -164,7 +204,10 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-16 border border-gray-200/50">
+    <div
+      v-else
+      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-16 border border-gray-200/50"
+    >
       <div class="text-center">
         <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +223,7 @@
         <p class="text-gray-600 mb-8 text-lg">Start capturing your ideas and they'll appear here</p>
         <router-link
           to="/editor"
-          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl gap-2 hover:scale-105"
+          class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all font-semibold shadow-lg hover:shadow-xl gap-2 hover:scale-105"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -203,8 +246,10 @@
           class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
           @click.self="selectedNote = null"
         >
-          <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[80vh] overflow-hidden shadow-2xl transform transition-all">
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-6 text-white">
+          <div
+            class="bg-white rounded-3xl max-w-3xl w-full max-h-[80vh] overflow-hidden shadow-2xl transform transition-all"
+          >
+            <div class="bg-gradient-to-r from-cyan-400 to-blue-500 px-8 py-6 text-white">
               <div class="flex items-center justify-between">
                 <div>
                   <h3 class="text-2xl font-bold">{{ selectedNote.subject }}</h3>
@@ -257,7 +302,7 @@ const subjectColors = {
   General: "bg-gray-400",
   Math: "bg-blue-400",
   History: "bg-green-400",
-  Science: "bg-purple-400",
+  Science: "bg-cyan-400",
   Literature: "bg-yellow-400",
   Language: "bg-red-400",
   Other: "bg-indigo-400",
@@ -284,30 +329,33 @@ async function deleteNote(id: string) {
   if (!confirm("Are you sure you want to delete this note?")) {
     return;
   }
-  
+
   try {
     await notesStore.deleteNote(id);
     console.log("Note deleted successfully:", id);
   } catch (error) {
     console.error("Error deleting note:", error);
-    alert("Failed to delete note. Please try again.");
   }
 }
 
 async function clearAllNotes() {
-  if (!confirm(`Are you sure you want to delete ALL ${notesStore.notes.length} notes? This cannot be undone!`)) {
+  if (
+    !confirm(
+      `Are you sure you want to delete ALL ${notesStore.notes.length} notes? This cannot be undone!`
+    )
+  ) {
     return;
   }
-  
+
   if (!confirm("This will permanently delete all your notes. Are you ABSOLUTELY sure?")) {
     return;
   }
-  
+
   try {
     // Delete all notes one by one
-    const noteIds = [...notesStore.notes.map(n => n.id)];
+    const noteIds = [...notesStore.notes.map((n) => n.id)];
     let deletedCount = 0;
-    
+
     for (const id of noteIds) {
       try {
         await notesStore.deleteNote(id);
@@ -316,12 +364,10 @@ async function clearAllNotes() {
         console.error("Error deleting note:", id, error);
       }
     }
-    
+
     console.log(`Deleted ${deletedCount} of ${noteIds.length} notes`);
-    alert(`Successfully deleted ${deletedCount} notes!`);
   } catch (error) {
     console.error("Error clearing all notes:", error);
-    alert("Failed to delete all notes. Please try again.");
   }
 }
 
@@ -339,23 +385,22 @@ function isNoteSelected(noteId: string): boolean {
 
 function getSelectedCount(subject: string): number {
   const subjectNotes = notesStore.getNotesBySubject(subject);
-  return subjectNotes.filter(note => selectedNoteIds.value.has(note.id)).length;
+  return subjectNotes.filter((note) => selectedNoteIds.value.has(note.id)).length;
 }
 
 function clearSelection(subject: string) {
   const subjectNotes = notesStore.getNotesBySubject(subject);
-  subjectNotes.forEach(note => selectedNoteIds.value.delete(note.id));
+  subjectNotes.forEach((note) => selectedNoteIds.value.delete(note.id));
 }
 
 function processSelectedNotes(subject: string) {
   const subjectNotes = notesStore.getNotesBySubject(subject);
-  const selectedNotes = subjectNotes.filter(note => selectedNoteIds.value.has(note.id));
-  
+  const selectedNotes = subjectNotes.filter((note) => selectedNoteIds.value.has(note.id));
+
   if (selectedNotes.length === 0) {
-    alert("Please select at least one note to analyze");
     return;
   }
-  
+
   // Navigate to merge view with selected notes
   router.push({
     name: "merge",

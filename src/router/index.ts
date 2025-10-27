@@ -57,13 +57,13 @@ router.beforeEach((to, from, next) => {
   }
   // Check if route is only for guests (like auth page)
   else if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    console.log("✅ Redirecting to editor - already authenticated");
+    console.log("Redirecting to editor - already authenticated");
     // Redirect to editor if already logged in
     next({ name: "editor" });
   }
   // Allow navigation
   else {
-    console.log("✅ Navigation allowed");
+    console.log("Navigation allowed");
     next();
   }
 });

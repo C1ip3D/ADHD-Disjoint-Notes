@@ -1,39 +1,52 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getAuth, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
+import { Capacitor } from "@capacitor/core";
 
-// Firebase configuration - Using WEB config for Capacitor
+// Firebase configuration - Using environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyDKxnm3SQLJPEA8SFgMfPI_Hj-67usI9Gg", // WEB API key
-  authDomain: "disjoint-7fac1.firebaseapp.com",
-  projectId: "disjoint-7fac1",
-  storageBucket: "disjoint-7fac1.firebasestorage.app",
-  messagingSenderId: "18155953495",
-  appId: "1:18155953495:web:bb880953645a6c68217212", // WEB app ID
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
-console.log("🔥 Firebase Config:", {
-  apiKey: firebaseConfig.apiKey ? "✓ Set" : "✗ Missing",
-  authDomain: firebaseConfig.authDomain || "✗ Missing",
-  projectId: firebaseConfig.projectId || "✗ Missing",
+console.log("🚀 Initializing Firebase...");
+console.log("Platform:", Capacitor.getPlatform());
+console.log("Native:", Capacitor.isNativePlatform());
+console.log("Firebase Config:", {
+  apiKey: firebaseConfig.apiKey ? `${firebaseConfig.apiKey.substring(0, 10)}...` : "Missing",
+  authDomain: firebaseConfig.authDomain || "Missing",
+  projectId: firebaseConfig.projectId || "Missing",
+  storageBucket: firebaseConfig.storageBucket || "Missing",
+  messagingSenderId: firebaseConfig.messagingSenderId || "Missing",
+  appId: firebaseConfig.appId ? `${firebaseConfig.appId.substring(0, 20)}...` : "Missing",
 });
 
-console.log("🔥 Full Firebase Config (for debugging):", JSON.stringify(firebaseConfig, null, 2));
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+
+// Initialize Auth with proper persistence for Capacitor
+const auth = Capacitor.isNativePlatform()
+  ? (() => {
+      console.log("📱 Using Capacitor native platform - initializing with indexedDB persistence");
+      return initializeAuth(app, {
+        persistence: indexedDBLocalPersistence,
+      });
+    })()
+  : (() => {
+      console.log("🌐 Using web platform - using default auth");
+      return getAuth(app);
+    })();
+
+// Initialize Firestore
+const db = getFirestore(app);
 
 console.log("✅ Firebase initialized successfully");
-console.log("🔐 Auth instance:", auth ? "✓ Created" : "✗ Failed");
-console.log("📊 Firestore instance:", db ? "✓ Created" : "✗ Failed");
+console.log("✅ Auth instance:", auth ? "Created" : "Failed");
+console.log("✅ Firestore instance:", db ? "Created" : "Failed");
 
-// Test auth connectivity after a brief delay
-setTimeout(() => {
-  console.log(
-    "⏱️ Auth ready state check:",
-    auth.currentUser === undefined ? "✓ Ready (no user)" : "✓ Has user"
-  );
-}, 1000);
-
+export { db, auth };
 export default app;

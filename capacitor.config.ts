@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.noteflow.app",
-  appName: "NoteFlow",
+  appId: "com.congressional.focusly.app",
+  appName: "Focusly",
   webDir: "dist",
   server: {
     androidScheme: "https",
@@ -18,7 +18,7 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: "light",
-      backgroundColor: "#3B82F6",
+      backgroundColor: "#22D3EE",
     },
   },
 };

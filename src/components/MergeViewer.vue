@@ -164,7 +164,7 @@
       >
         <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
           <div
-            class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center"
+            class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center"
           >
             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -181,7 +181,7 @@
           <div
             v-for="(suggestion, index) in processedNote.suggestions"
             :key="index"
-            class="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl hover:border-purple-300 transition-all"
+            class="p-4 bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-purple-200 rounded-2xl hover:border-purple-300 transition-all"
           >
             <p class="text-purple-800 font-medium">{{ suggestion }}</p>
           </div>
@@ -193,7 +193,7 @@
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <button
             @click="exportNotes"
-            class="px-8 py-3.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-105"
+            class="px-8 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-105"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -235,7 +235,7 @@
         <p class="text-gray-600 mb-6">Select notes from your collection to analyze them with AI</p>
         <router-link
           to="/notes"
-          class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl gap-2"
+          class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -257,13 +257,11 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { marked } from "marked";
 import { useNotesStore } from "../stores/notes";
-import { useSettingsStore } from "../stores/settings";
 import { OpenAIProvider, type ProcessedNote } from "../services/openaiProvider";
 
 const router = useRouter();
 const route = useRoute();
 const notesStore = useNotesStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -278,7 +276,7 @@ async function analyzeNotes() {
   if (!noteIds) return;
 
   // Check if API key is configured
-  if (!settingsStore.isApiKeySet) {
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
     error.value = "Please configure your OpenAI API key in Settings first.";
     return;
   }
@@ -295,7 +293,7 @@ async function analyzeNotes() {
     }
 
     // Use real OpenAI provider with user's API key
-    const aiProvider = new OpenAIProvider(settingsStore.apiKey);
+    const aiProvider = new OpenAIProvider(import.meta.env.VITE_OPENAI_API_KEY || "");
     processedNote.value = await aiProvider.analyzeNotes(
       selectedNotes,
       selectedNotes[0]?.subject || "General"

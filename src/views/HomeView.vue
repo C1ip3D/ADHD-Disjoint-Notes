@@ -4,38 +4,58 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
       <div class="text-center">
         <!-- Animated Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-8 animate-fade-in">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-8 animate-fade-in"
+        >
           <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
           <span class="text-sm font-medium text-blue-700">AI-Powered Note Taking</span>
         </div>
 
         <h1 class="text-6xl md:text-7xl font-bold mb-6 animate-slide-up">
-          <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            NoteFlow
-          </span>
+          <span class="text-blue-600"> Focusly </span>
         </h1>
-        <p class="text-2xl text-gray-600 mb-4 max-w-3xl mx-auto animate-slide-up" style="animation-delay: 0.1s">
+        <p
+          class="text-2xl text-gray-600 mb-4 max-w-3xl mx-auto animate-slide-up"
+          style="animation-delay: 0.1s"
+        >
           Transform scattered thoughts into organized knowledge
         </p>
-        <p class="text-lg text-gray-500 mb-12 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.2s">
-          Perfect for ADHD students. Upload images, capture ideas, and let AI find the connections you missed.
+        <p
+          class="text-lg text-gray-500 mb-12 max-w-2xl mx-auto animate-slide-up"
+          style="animation-delay: 0.2s"
+        >
+          Perfect for ADHD students. Upload images, capture ideas, and let AI find the connections
+          you missed.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.3s">
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up"
+          style="animation-delay: 0.3s"
+        >
           <button
             @click="handleStartClick"
-            class="group px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all text-lg font-semibold shadow-2xl hover:shadow-3xl hover:scale-105 inline-flex items-center gap-2"
+            class="group px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-cyan-500 hover:to-blue-600 transition-all text-lg font-semibold shadow-2xl hover:shadow-3xl hover:scale-105 inline-flex items-center gap-2"
           >
-            <span>{{ authStore.isAuthenticated ? 'Start Taking Notes' : 'Get Started Free' }}</span>
-            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            <span>{{ authStore.isAuthenticated ? "Start Taking Notes" : "Get Started Free" }}</span>
+            <svg
+              class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
             </svg>
           </button>
           <button
             @click="handleStartClick"
             class="px-8 py-4 bg-white text-gray-700 rounded-2xl hover:bg-gray-50 transition-all text-lg font-semibold shadow-xl border-2 border-gray-200 hover:border-gray-300"
           >
-            {{ authStore.isAuthenticated ? 'Go to Notes' : 'Learn More' }}
+            {{ authStore.isAuthenticated ? "Go to Notes" : "Learn More" }}
           </button>
         </div>
       </div>
@@ -44,22 +64,19 @@
     <!-- Features Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">Why students love NoteFlow</h2>
-        <p class="text-xl text-gray-600">
-          Designed specifically for ADHD learners
-        </p>
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">Why students love Focusly</h2>
+        <p class="text-xl text-gray-600">Designed specifically for ADHD learners</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Feature 1 -->
-        <div class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-            <svg
-              class="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+        <div
+          class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg"
+          >
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -70,19 +87,19 @@
           </div>
           <h3 class="text-2xl font-bold text-gray-900 mb-3">Quick Capture</h3>
           <p class="text-gray-600 text-lg leading-relaxed">
-            Type or snap photos of your notes. Auto-save keeps your thoughts safe. Markdown support for rich formatting.
+            Type or snap photos of your notes. Auto-save keeps your thoughts safe. Markdown support
+            for rich formatting.
           </p>
         </div>
 
         <!-- Feature 2 -->
-        <div class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-            <svg
-              class="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+        <div
+          class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg"
+          >
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -98,14 +115,13 @@
         </div>
 
         <!-- Feature 3 -->
-        <div class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-          <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-            <svg
-              class="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+        <div
+          class="group bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+        >
+          <div
+            class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg"
+          >
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -123,25 +139,37 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 py-20 relative overflow-hidden">
+    <div class="bg-gradient-to-r from-cyan-400 to-blue-500 py-20 relative overflow-hidden">
       <!-- Animated background elements -->
       <div class="absolute inset-0 opacity-20">
-        <div class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl animate-float" style="animation-delay: 2s"></div>
+        <div
+          class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl animate-float"
+        ></div>
+        <div
+          class="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl animate-float"
+          style="animation-delay: 2s"
+        ></div>
       </div>
-      
+
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to transform your notes?</h2>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+          Ready to transform your notes?
+        </h2>
         <p class="text-xl text-white/90 mb-10">
           Join students who are using AI to study smarter, not harder.
         </p>
         <button
           @click="handleStartClick"
-          class="inline-flex items-center px-10 py-5 bg-white text-purple-600 rounded-2xl hover:bg-gray-50 transition-all text-xl font-bold shadow-2xl hover:shadow-3xl hover:scale-105 gap-3"
+          class="inline-flex items-center px-10 py-5 bg-white text-blue-600 rounded-2xl hover:bg-gray-50 transition-all text-xl font-bold shadow-2xl hover:shadow-3xl hover:scale-105 gap-3"
         >
-          <span>{{ authStore.isAuthenticated ? 'Start Taking Notes' : 'Get Started Free' }}</span>
+          <span>{{ authStore.isAuthenticated ? "Start Taking Notes" : "Get Started Free" }}</span>
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            ></path>
           </svg>
         </button>
       </div>
@@ -188,7 +216,8 @@ function handleStartClick() {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {

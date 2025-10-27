@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen">
     <AuthLogin v-if="isLogin" @switchToSignup="isLogin = false" />
     <AuthSignup v-else @switchToLogin="isLogin = true" />
   </div>

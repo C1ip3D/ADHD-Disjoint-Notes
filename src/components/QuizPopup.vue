@@ -12,7 +12,7 @@
         >
           <!-- Header -->
           <div
-            class="bg-gradient-to-r from-purple-500 to-pink-600 px-8 py-6 text-white flex items-center justify-between"
+            class="bg-gradient-to-r from-cyan-400 to-blue-500 px-8 py-6 text-white flex items-center justify-between"
           >
             <div class="flex items-center gap-3">
               <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -46,7 +46,7 @@
           </div>
 
           <!-- Quiz Content -->
-          <div class="flex-1 overflow-y-auto p-8 bg-gradient-to-br from-purple-50 to-pink-50">
+          <div class="flex-1 overflow-y-auto p-8 bg-gradient-to-br from-cyan-50 to-blue-50">
             <div class="space-y-6">
               <div
                 v-for="(question, qIndex) in questions"
@@ -57,7 +57,7 @@
                 <div class="mb-5">
                   <div class="flex items-start gap-3 mb-4">
                     <div
-                      class="w-9 h-9 bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0"
+                      class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0"
                     >
                       {{ qIndex + 1 }}
                     </div>
@@ -76,7 +76,7 @@
                     :class="[
                       'w-full text-left p-4 rounded-xl border-2 transition-all',
                       userAnswers[qIndex] === undefined
-                        ? 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
+                        ? 'border-gray-200 hover:border-cyan-300 hover:bg-cyan-50'
                         : userAnswers[qIndex] === oIndex
                         ? oIndex === question.correctAnswer
                           ? 'border-green-500 bg-green-50 text-green-900'
@@ -180,7 +180,7 @@
               </p>
               <button
                 @click="resetQuiz"
-                class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all font-semibold"
+                class="px-8 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all font-semibold"
               >
                 Try Again
               </button>

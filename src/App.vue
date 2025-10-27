@@ -8,28 +8,12 @@
         <div class="flex justify-between h-16">
           <div class="flex items-center">
             <router-link to="/" class="flex items-center group">
-              <div
-                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 group-hover:scale-105 transition-transform shadow-lg"
-              >
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  ></path>
-                </svg>
-              </div>
-              <span
-                class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-              >
-                NoteFlow
-              </span>
+              <img
+                src="/favicon.png"
+                alt="Focusly"
+                class="w-16 h-16 rounded-xl mr-3 group-hover:scale-105 transition-transform"
+              />
+              <span class="text-3xl font-bold text-blue-600"> Focusly </span>
             </router-link>
           </div>
 
@@ -58,28 +42,6 @@
                 AI Analyze
               </router-link>
 
-              <!-- Settings Button -->
-              <button
-                @click="showSettings = true"
-                class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all"
-                title="Settings"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  ></path>
-                </svg>
-              </button>
-
               <!-- User Menu -->
               <div class="relative" ref="userMenuContainer">
                 <button
@@ -87,7 +49,7 @@
                   class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-all"
                 >
                   <div
-                    class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-md"
+                    class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-md"
                   >
                     <span class="text-sm font-bold text-white">
                       {{ authStore.userDisplayName.charAt(0).toUpperCase() }}
@@ -149,7 +111,7 @@
             <template v-else>
               <router-link
                 to="/auth"
-                class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+                class="px-6 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl font-medium hover:from-cyan-500 hover:to-blue-600 transition-all shadow-lg hover:shadow-xl"
               >
                 Sign In
               </router-link>
@@ -164,9 +126,6 @@
       <RouterView />
     </main>
 
-    <!-- Settings Modal -->
-    <SettingsModal v-model="showSettings" />
-
     <!-- AI Chat Assistant (Always Available) -->
     <AIChatAssistant v-if="authStore.isAuthenticated" />
   </div>
@@ -176,12 +135,10 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { useAuthStore } from "./stores/auth";
-import SettingsModal from "./components/SettingsModal.vue";
 import AIChatAssistant from "./components/AIChatAssistant.vue";
 
 const authStore = useAuthStore();
 const showUserMenu = ref(false);
-const showSettings = ref(false);
 const userMenuContainer = ref<HTMLElement | null>(null);
 
 async function handleLogout() {

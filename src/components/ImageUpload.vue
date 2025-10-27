@@ -25,7 +25,7 @@
 
       <button
         @click="imageInput?.click()"
-        class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg"
+        class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-blue-700 transition-all shadow-lg"
       >
         <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -112,7 +112,7 @@
         <div class="max-w-4xl w-full">
           <div class="bg-white rounded-3xl overflow-hidden shadow-2xl">
             <div
-              class="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4 text-white flex items-center justify-between"
+              class="bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-4 text-white flex items-center justify-between"
             >
               <h3 class="text-xl font-bold">Take Photo</h3>
               <button
@@ -140,7 +140,7 @@
               <div class="flex justify-center gap-4">
                 <button
                   @click="capturePhoto"
-                  class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg flex items-center gap-2"
+                  class="px-8 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all font-semibold shadow-lg flex items-center gap-2"
                 >
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -270,7 +270,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useSettingsStore } from "../stores/settings";
 import OpenAI from "openai";
 
 interface UploadedImage {
@@ -285,7 +284,6 @@ const emit = defineEmits<{
   (e: "text-extracted", text: string): void;
 }>();
 
-const settingsStore = useSettingsStore();
 const images = ref<UploadedImage[]>([]);
 const isDragging = ref(false);
 const isAnalyzing = ref(false);
@@ -311,7 +309,6 @@ async function openCamera() {
     }
   } catch (error) {
     console.error("Error accessing camera:", error);
-    alert("Could not access camera. Please check permissions.");
     closeCamera();
   }
 }
@@ -421,8 +418,7 @@ function removeImage(index: number) {
 }
 
 async function analyzeImage(index: number) {
-  if (!settingsStore.isApiKeySet) {
-    alert("Please set your OpenAI API key in Settings first!");
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
     return;
   }
 
@@ -434,7 +430,7 @@ async function analyzeImage(index: number) {
 
   try {
     const openai = new OpenAI({
-      apiKey: settingsStore.apiKey,
+      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
       dangerouslyAllowBrowser: true,
     });
 
@@ -465,7 +461,6 @@ async function analyzeImage(index: number) {
     image.analyzed = true;
   } catch (error: any) {
     console.error("Error analyzing image:", error);
-    alert(`Failed to analyze image: ${error.message}`);
   } finally {
     image.isAnalyzing = false;
     isAnalyzing.value = false;

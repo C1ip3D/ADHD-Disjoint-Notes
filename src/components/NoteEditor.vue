@@ -4,11 +4,7 @@
     <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h1
-            class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-          >
-            Create Note
-          </h1>
+          <h1 class="text-3xl font-bold text-blue-600">Create Note</h1>
           <p class="text-gray-500 text-sm mt-1">Capture your thoughts with text or images</p>
         </div>
 
@@ -157,7 +153,7 @@
           <button
             @click="() => saveNote(false)"
             :disabled="!noteContent.trim()"
-            class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
+            class="px-6 py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl hover:from-cyan-500 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

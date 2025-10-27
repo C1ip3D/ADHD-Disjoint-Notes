@@ -384,7 +384,7 @@ For General notes:
         // If we lost the correct answer during deduplication, find its new index
         let newCorrectIndex = q.correctAnswer;
         if (uniqueOptions.length !== q.options.length) {
-          const correctAnswerText = q.options[q.correctAnswer];
+          const correctAnswerText = q.options[q.correctAnswer] || q.options[0] || "";
           newCorrectIndex = uniqueOptions.indexOf(correctAnswerText);
           if (newCorrectIndex === -1) {
             newCorrectIndex = 0;

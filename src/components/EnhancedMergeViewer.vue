@@ -262,7 +262,7 @@
       <p class="text-gray-500 mb-8 text-lg">Please select notes from your collection to analyze</p>
       <router-link
         to="/notes"
-        class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg gap-3"
+        class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg gap-3"
       >
         View Your Notes
       </router-link>
@@ -277,13 +277,11 @@ import { marked } from "marked";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useNotesStore } from "../stores/notes";
-import { useSettingsStore } from "../stores/settings";
 import { OpenAIProvider, type ProcessedNote } from "../services/openaiProvider";
 
 const router = useRouter();
 const route = useRoute();
 const notesStore = useNotesStore();
-const settingsStore = useSettingsStore();
 
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -327,7 +325,7 @@ async function analyzeNotes() {
   const noteIds = route.query.notes as string;
   if (!noteIds) return;
 
-  if (!settingsStore.isApiKeySet) {
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
     error.value = "Please configure your OpenAI API key in Settings first.";
     return;
   }
@@ -343,7 +341,7 @@ async function analyzeNotes() {
       return;
     }
 
-    const aiProvider = new OpenAIProvider(settingsStore.apiKey);
+    const aiProvider = new OpenAIProvider(import.meta.env.VITE_OPENAI_API_KEY || "");
     processedNote.value = await aiProvider.analyzeNotes(
       selectedNotes,
       selectedNotes[0]?.subject || "General"
@@ -391,10 +389,9 @@ async function exportAsPDF() {
       heightLeft -= pageHeight;
     }
 
-    pdf.save(`NoteFlow-Analysis-${new Date().toISOString().split("T")[0]}.pdf`);
+    pdf.save(`Focusly-Analysis-${new Date().toISOString().split("T")[0]}.pdf`);
   } catch (error) {
     console.error("Error exporting PDF:", error);
-    alert("Failed to export PDF. Please try again.");
   } finally {
     isExporting.value = false;
   }

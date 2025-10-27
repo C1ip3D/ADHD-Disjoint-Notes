@@ -25,7 +25,7 @@
 
       <button
         @click="pickFromGallery"
-        class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg active:scale-95"
+        class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-cyan-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-blue-700 transition-all shadow-lg active:scale-95"
       >
         <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -174,7 +174,7 @@
       </div>
       <button
         @click="insertText"
-        class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold shadow-lg active:scale-95 transition-transform"
+        class="w-full px-4 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl font-semibold shadow-lg active:scale-95 transition-transform"
       >
         Insert into Note
       </button>
@@ -187,7 +187,6 @@ import { ref, onMounted } from "vue";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { useSettingsStore } from "../stores/settings";
 import OpenAI from "openai";
 
 interface UploadedImage {
@@ -201,7 +200,6 @@ const emit = defineEmits<{
   (e: "text-extracted", text: string): void;
 }>();
 
-const settingsStore = useSettingsStore();
 const images = ref<UploadedImage[]>([]);
 const isDragging = ref(false);
 const isAnalyzing = ref(false);
@@ -294,8 +292,7 @@ function removeImage(index: number) {
 }
 
 async function analyzeImage(index: number) {
-  if (!settingsStore.isApiKeySet) {
-    alert("Please set your OpenAI API key in Settings first!");
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
     return;
   }
 
@@ -309,7 +306,7 @@ async function analyzeImage(index: number) {
 
   try {
     const openai = new OpenAI({
-      apiKey: settingsStore.apiKey,
+      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
       dangerouslyAllowBrowser: true,
     });
 
@@ -341,7 +338,6 @@ async function analyzeImage(index: number) {
     await vibrate(ImpactStyle.Medium);
   } catch (error: any) {
     console.error("Error analyzing image:", error);
-    alert(`Failed to analyze image: ${error.message}`);
   } finally {
     image.isAnalyzing = false;
     isAnalyzing.value = false;

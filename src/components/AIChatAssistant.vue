@@ -9,7 +9,7 @@
       >
         <!-- Header -->
         <div
-          class="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4 text-white flex items-center justify-between"
+          class="bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-4 text-white flex items-center justify-between"
         >
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -50,7 +50,7 @@
           <!-- Welcome Message -->
           <div v-if="messages.length === 0" class="text-center py-8">
             <div
-              class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center"
+              class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center"
             >
               <svg
                 class="w-10 h-10 text-white"
@@ -95,7 +95,7 @@
             <!-- User Message -->
             <div v-if="message.role === 'user'" class="flex justify-end">
               <div
-                class="max-w-[80%] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg"
+                class="max-w-[80%] bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg"
               >
                 <p class="text-sm">{{ message.content }}</p>
               </div>
@@ -120,11 +120,11 @@
               <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                 <div
-                  class="w-2 h-2 bg-purple-500 rounded-full animate-bounce"
+                  class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                   style="animation-delay: 0.1s"
                 ></div>
                 <div
-                  class="w-2 h-2 bg-pink-500 rounded-full animate-bounce"
+                  class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"
                   style="animation-delay: 0.2s"
                 ></div>
               </div>
@@ -145,7 +145,7 @@
             <button
               @click="sendMessage"
               :disabled="!inputMessage.trim() || isLoading"
-              class="p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:scale-105"
+              class="p-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl hover:from-cyan-500 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:scale-105"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -164,7 +164,7 @@
     <!-- Chat Button -->
     <button
       @click="toggleChat"
-      class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center justify-center group"
+      class="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center justify-center group"
     >
       <svg v-if="!isOpen" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -196,7 +196,6 @@
 import { ref, nextTick, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 import { marked } from "marked";
-import { useSettingsStore } from "../stores/settings";
 import { useNotesStore } from "../stores/notes";
 import OpenAI from "openai";
 
@@ -205,7 +204,6 @@ interface Message {
   content: string;
 }
 
-const settingsStore = useSettingsStore();
 const notesStore = useNotesStore();
 const route = useRoute();
 
@@ -269,8 +267,7 @@ function toggleChat() {
 async function sendMessage() {
   if (!inputMessage.value.trim() || isLoading.value) return;
 
-  if (!settingsStore.isApiKeySet) {
-    alert("Please set your OpenAI API key in Settings first!");
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
     return;
   }
 
@@ -283,11 +280,11 @@ async function sendMessage() {
 
   try {
     const openai = new OpenAI({
-      apiKey: settingsStore.apiKey,
+      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
       dangerouslyAllowBrowser: true,
     });
 
-    const systemMessage = `You are an intelligent AI assistant for NoteFlow, a note-taking app designed for ADHD students.
+    const systemMessage = `You are an intelligent AI assistant for Focusly, a note-taking app designed for ADHD students.
 
 CURRENT CONTEXT:
 - User is on: ${currentPage.value}
