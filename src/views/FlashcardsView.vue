@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flashcards-view min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 py-8 px-4"
+    class="flashcards-view min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 px-4"
+    style="padding-top: max(env(safe-area-inset-top), 1.5rem); padding-bottom: 1.5rem"
   >
     <div class="max-w-6xl mx-auto space-y-6">
       <!-- Header -->
@@ -62,7 +63,7 @@
         </div>
 
         <div v-else-if="totalCards === 0" class="bg-white rounded-xl shadow-lg p-12 text-center">
-          <div class="text-6xl mb-4">📚</div>
+          <Icons name="book" class="w-16 h-16 text-purple-300 mx-auto mb-4" />
           <h3 class="text-xl font-semibold text-gray-900 mb-2">No Flashcards Yet</h3>
           <p class="text-gray-600 mb-6">Create flashcards from your notes to get started!</p>
           <router-link
@@ -82,7 +83,7 @@
             <div class="flex items-start justify-between">
               <div class="flex-1">
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                  Deck from Note {{ noteId.substring(0, 8) }}
+                  Deck from Note {{ String(noteId).substring(0, 8) }}
                 </h3>
                 <div class="flex items-center gap-4 text-sm text-gray-600">
                   <span>{{ cards.length }} cards</span>
@@ -120,6 +121,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useFlashcardsStore, type Flashcard } from "../stores/flashcards";
 import FlashcardReview from "../components/FlashcardReview.vue";
+import Icons from "../components/Icons.vue";
 
 const flashcardsStore = useFlashcardsStore();
 const reviewingCards = ref<Flashcard[] | null>(null);

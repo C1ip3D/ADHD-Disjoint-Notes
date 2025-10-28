@@ -1,6 +1,7 @@
 <template>
   <div
-    class="focus-view min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4"
+    class="focus-view min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4"
+    style="padding-top: max(env(safe-area-inset-top), 1.5rem); padding-bottom: 1.5rem"
   >
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">

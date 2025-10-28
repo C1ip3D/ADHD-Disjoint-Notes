@@ -54,7 +54,10 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
       if (!grouped[card.noteId]) {
         grouped[card.noteId] = [];
       }
-      grouped[card.noteId].push(card);
+      const noteGroup = grouped[card.noteId];
+      if (noteGroup) {
+        noteGroup.push(card);
+      }
     });
     return grouped;
   });

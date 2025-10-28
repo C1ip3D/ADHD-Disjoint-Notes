@@ -53,14 +53,16 @@ export const useFocusStore = defineStore("focus", () => {
     sessionHistory.value.forEach((session) => {
       if (session.completed) {
         const dateKey = session.startTime.toISOString().split("T")[0];
-        dates.add(dateKey);
+        if (dateKey) {
+          dates.add(dateKey);
+        }
       }
     });
 
     const sortedDates = Array.from(dates).sort().reverse();
     let streak = 0;
-    const today = new Date().toISOString().split("T")[0];
-    let expectedDate = new Date(today);
+    const today = new Date().toISOString().split("T")[0] || "";
+    let expectedDate = new Date(today || new Date());
 
     for (const dateStr of sortedDates) {
       const expectedDateStr = expectedDate.toISOString().split("T")[0];

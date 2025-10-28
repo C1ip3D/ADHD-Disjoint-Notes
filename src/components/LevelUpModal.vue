@@ -11,7 +11,10 @@
           @click.stop
         >
           <div class="mb-6">
-            <div class="text-8xl mb-4 animate-bounce">🎉</div>
+            <Icons
+              name="celebration"
+              class="w-24 h-24 text-purple-500 mx-auto mb-4 animate-bounce"
+            />
             <h2
               class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2"
             >
@@ -34,7 +37,7 @@
                 :key="badge.id"
                 class="bg-white rounded-xl p-4 shadow-lg transform hover:scale-105 transition-transform"
               >
-                <div class="text-4xl mb-2">{{ badge.icon }}</div>
+                <component :is="getBadgeIcon(badge.type)" />
                 <div class="text-xs font-medium text-gray-700">{{ badge.name }}</div>
               </div>
             </div>
@@ -53,9 +56,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch, h } from "vue";
 import confetti from "canvas-confetti";
-import { useGamificationStore } from "../stores/gamification";
+import { useGamificationStore, type Badge } from "../stores/gamification";
+import Icons from "./Icons.vue";
 
 const gamificationStore = useGamificationStore();
 
@@ -105,6 +109,17 @@ function launchConfetti() {
       origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
     });
   }, 250);
+}
+
+function getBadgeIcon(type: Badge["type"]) {
+  const iconMap = {
+    focus: () => h(Icons, { name: "target", class: "w-12 h-12 mb-2 mx-auto text-blue-500" }),
+    streak: () => h(Icons, { name: "fire", class: "w-12 h-12 mb-2 mx-auto text-orange-500" }),
+    quiz: () => h(Icons, { name: "notes", class: "w-12 h-12 mb-2 mx-auto text-green-500" }),
+    flashcard: () => h(Icons, { name: "flashcard", class: "w-12 h-12 mb-2 mx-auto text-pink-500" }),
+    notes: () => h(Icons, { name: "book", class: "w-12 h-12 mb-2 mx-auto text-indigo-500" }),
+  };
+  return iconMap[type];
 }
 
 function close() {

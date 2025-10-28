@@ -295,7 +295,7 @@ export const useAnalyticsStore = defineStore("analytics", () => {
 
   // Helper: Get date key (YYYY-MM-DD)
   function getDateKey(date: Date): string {
-    return date.toISOString().split("T")[0];
+    return date.toISOString().split("T")[0] || "";
   }
 
   // Load today's analytics

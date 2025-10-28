@@ -113,7 +113,7 @@
 
     <div v-else-if="reviewCompleted" class="text-center space-y-6">
       <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8">
-        <div class="text-6xl mb-4">🎉</div>
+        <Icons name="celebration" class="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h2 class="text-3xl font-bold text-gray-900 mb-2">Review Complete!</h2>
         <p class="text-gray-600 mb-6">Great job reviewing {{ reviewedCount }} cards</p>
 
@@ -150,6 +150,7 @@ import { useFlashcardsStore, type Flashcard } from "../stores/flashcards";
 import { useAnalyticsStore } from "../stores/analytics";
 import { SpacedRepetitionService } from "../services/spacedRepetition";
 import { XPTracker } from "../services/xpTracker";
+import Icons from "./Icons.vue";
 
 const props = defineProps<{
   cards?: Flashcard[];
@@ -285,15 +286,21 @@ async function markCard(correct: boolean) {
   width: 100%;
   min-height: 300px;
   backface-visibility: hidden;
-  @apply bg-white rounded-2xl shadow-xl p-8 flex items-center justify-center;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card-front {
-  @apply border-2 border-purple-200;
+  border: 2px solid #e9d5ff;
 }
 
 .card-back {
-  @apply border-2 border-pink-200;
+  border: 2px solid #fbcfe8;
   transform: rotateY(180deg);
 }
 </style>

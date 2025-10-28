@@ -35,7 +35,8 @@ export class XPTracker {
     amount: number = 1
   ): Promise<any[]> {
     const gamificationStore = useGamificationStore();
-    return await gamificationStore.incrementStat(statType, amount);
+    const result = await gamificationStore.incrementStat(statType, amount);
+    return result || [];
   }
 
   /**

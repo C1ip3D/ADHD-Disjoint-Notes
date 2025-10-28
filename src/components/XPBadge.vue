@@ -66,11 +66,17 @@
             <div class="grid grid-cols-2 gap-3">
               <div class="bg-gray-50 rounded-lg p-3">
                 <div class="text-xs text-gray-600">Current Streak</div>
-                <div class="text-lg font-bold text-orange-600">🔥 {{ currentStreak }}</div>
+                <div class="text-lg font-bold text-orange-600 flex items-center gap-1">
+                  <Icons name="fire" class="w-5 h-5" />
+                  {{ currentStreak }}
+                </div>
               </div>
               <div class="bg-gray-50 rounded-lg p-3">
                 <div class="text-xs text-gray-600">Badges</div>
-                <div class="text-lg font-bold text-yellow-600">🏆 {{ unlockedBadgesCount }}</div>
+                <div class="text-lg font-bold text-yellow-600 flex items-center gap-1">
+                  <Icons name="trophy" class="w-5 h-5" />
+                  {{ unlockedBadgesCount }}
+                </div>
               </div>
             </div>
           </div>
@@ -78,13 +84,8 @@
           <div v-if="recentBadges.length > 0" class="border-t pt-4">
             <div class="text-sm font-medium text-gray-700 mb-2">Recent Badges</div>
             <div class="flex gap-2">
-              <div
-                v-for="badge in recentBadges"
-                :key="badge.id"
-                :title="badge.name"
-                class="text-2xl"
-              >
-                {{ badge.icon }}
+              <div v-for="badge in recentBadges" :key="badge.id" :title="badge.name">
+                <component :is="getBadgeIcon(badge.type)" />
               </div>
             </div>
           </div>
@@ -95,8 +96,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useGamificationStore } from "../stores/gamification";
+import { ref, computed, onMounted, onUnmounted, h } from "vue";
+import { useGamificationStore, type Badge } from "../stores/gamification";
+import Icons from "./Icons.vue";
 
 const gamificationStore = useGamificationStore();
 const showDetails = ref(false);
@@ -128,6 +130,17 @@ function formatXP(value: number): string {
     return `${(value / 1000).toFixed(1)}K`;
   }
   return value.toString();
+}
+
+function getBadgeIcon(type: Badge["type"]) {
+  const iconMap = {
+    focus: () => h(Icons, { name: "target", class: "w-8 h-8 text-blue-500" }),
+    streak: () => h(Icons, { name: "fire", class: "w-8 h-8 text-orange-500" }),
+    quiz: () => h(Icons, { name: "notes", class: "w-8 h-8 text-green-500" }),
+    flashcard: () => h(Icons, { name: "flashcard", class: "w-8 h-8 text-pink-500" }),
+    notes: () => h(Icons, { name: "book", class: "w-8 h-8 text-indigo-500" }),
+  };
+  return iconMap[type];
 }
 
 function handleClickOutside(event: MouseEvent) {

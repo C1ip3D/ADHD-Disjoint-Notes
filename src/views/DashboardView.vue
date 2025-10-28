@@ -1,205 +1,114 @@
 <template>
   <div
-    class="dashboard-view min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-8 px-4"
+    class="dashboard-view min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 px-4"
+    style="padding-top: max(env(safe-area-inset-top), 1.5rem); padding-bottom: 1.5rem"
   >
-    <div class="max-w-7xl mx-auto space-y-8">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p class="text-gray-600">Your personalized learning insights</p>
-      </div>
-
-      <!-- ML Predictions -->
-      <div v-if="predictions" class="space-y-4">
-        <h2 class="text-2xl font-bold text-gray-900">📊 AI Insights</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Best Note Format -->
-          <div class="bg-white rounded-2xl shadow-lg p-6">
-            <div class="text-3xl mb-3">📝</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Best Note Format</h3>
-            <p class="text-gray-600 text-sm mb-3">
-              Based on your quiz performance,
-              <strong class="text-purple-600">{{
-                predictions.noteFormat.recommendedFormat
-              }}</strong>
-              works best for you!
-            </p>
-            <div class="text-xs text-gray-500">
-              {{ Math.round(predictions.noteFormat.confidence * 100) }}% confidence
-            </div>
-          </div>
-
-          <!-- Optimal Study Time -->
-          <div class="bg-white rounded-2xl shadow-lg p-6">
-            <div class="text-3xl mb-3">⏰</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Best Study Times</h3>
-            <p class="text-gray-600 text-sm mb-3">You're most productive at:</p>
-            <div class="flex gap-2">
-              <span
-                v-for="hour in predictions.optimalTime.topHours.slice(0, 3)"
-                :key="hour"
-                class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium"
-              >
-                {{ formatHour(hour) }}
+    <div class="max-w-6xl mx-auto space-y-6">
+      <!-- Profile Section -->
+      <div>
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <!-- User Avatar and Name -->
+          <div class="flex items-center gap-4 mb-6">
+            <div
+              class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <span class="text-2xl font-bold text-white">
+                {{ authStore.userDisplayName.charAt(0).toUpperCase() }}
               </span>
             </div>
-          </div>
-
-          <!-- Attention Zones -->
-          <div class="bg-white rounded-2xl shadow-lg p-6">
-            <div class="text-3xl mb-3">⚠️</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Review Focus Areas</h3>
-            <p class="text-gray-600 text-sm">
-              {{
-                predictions.attentionZones.weakSections.length > 0
-                  ? `You have ${predictions.attentionZones.weakSections.length} sections that need extra review`
-                  : "Great! No weak areas detected"
-              }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gamification Stats -->
-      <div class="space-y-4">
-        <h2 class="text-2xl font-bold text-gray-900">🏆 Your Progress</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div
-            class="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-2xl shadow-lg p-6"
-          >
-            <div class="text-4xl font-bold mb-2">{{ level }}</div>
-            <div class="text-sm opacity-90">Current Level</div>
-            <div class="text-xs mt-2 opacity-75">{{ xp }} / {{ xpToNextLevel }} XP</div>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-2xl shadow-lg p-6"
-          >
-            <div class="text-4xl font-bold mb-2">🔥 {{ currentStreak }}</div>
-            <div class="text-sm opacity-90">Day Streak</div>
-            <div class="text-xs mt-2 opacity-75">Keep it up!</div>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl shadow-lg p-6"
-          >
-            <div class="text-4xl font-bold mb-2">{{ stats.focusSessionsCompleted }}</div>
-            <div class="text-sm opacity-90">Focus Sessions</div>
-            <div class="text-xs mt-2 opacity-75">Total completed</div>
-          </div>
-
-          <div
-            class="bg-gradient-to-br from-green-500 to-teal-500 text-white rounded-2xl shadow-lg p-6"
-          >
-            <div class="text-4xl font-bold mb-2">{{ unlockedBadgesCount }}</div>
-            <div class="text-sm opacity-90">Badges Earned</div>
-            <div class="text-xs mt-2 opacity-75">
-              {{ BADGES.length - unlockedBadgesCount }} to go
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-gray-900">{{ authStore.userDisplayName }}</h3>
+              <p class="text-sm text-gray-600">{{ authStore.user?.email }}</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Badges Showcase -->
-      <div v-if="unlockedBadges.length > 0" class="space-y-4">
-        <h2 class="text-2xl font-bold text-gray-900">🎖️ Your Badges</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <div
-            v-for="badge in BADGES"
-            :key="badge.id"
-            class="bg-white rounded-2xl shadow-lg p-4 text-center transition-all"
-            :class="badge.unlocked ? 'hover:scale-105' : 'opacity-40 grayscale'"
-          >
-            <div class="text-4xl mb-2">{{ badge.icon }}</div>
-            <div class="text-sm font-medium text-gray-900">{{ badge.name }}</div>
-            <div class="text-xs text-gray-500 mt-1">{{ badge.description }}</div>
+          <!-- Progress Bar -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-semibold text-gray-700">Level {{ level }}</span>
+              <span class="text-xs text-gray-500">{{ xp }} XP / {{ xpToNextLevel }} XP</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div
+                class="bg-gradient-to-r from-cyan-400 to-blue-500 h-full rounded-full transition-all"
+                :style="{ width: `${progressPercentage}%` }"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="text-center p-3 bg-gray-50 rounded-lg">
+              <div class="text-xl font-bold text-blue-600">{{ xp }}</div>
+              <div class="text-xs text-gray-600">Total XP</div>
+            </div>
+            <div class="text-center p-3 bg-gray-50 rounded-lg">
+              <div class="text-xl font-bold text-green-600">{{ unlockedBadgesCount }}</div>
+              <div class="text-xs text-gray-600">Badges Earned</div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Quick Actions -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <router-link
-          to="/flashcards"
-          class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-center group"
-        >
-          <div class="text-4xl mb-3">🃏</div>
-          <h3
-            class="font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors"
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <router-link
+            to="/editor"
+            class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
           >
-            Study Flashcards
-          </h3>
-          <p class="text-sm text-gray-600">Review and master your cards</p>
-        </router-link>
+            <Icons name="notes" class="w-10 h-10 mb-2" />
+            <h3 class="font-bold mb-1">Take Notes</h3>
+            <p class="text-xs opacity-90">Start capturing ideas</p>
+          </router-link>
 
-        <router-link
-          to="/focus"
-          class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-center group"
-        >
-          <div class="text-4xl mb-3">⏱️</div>
-          <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-            Focus Session
-          </h3>
-          <p class="text-sm text-gray-600">Start a Pomodoro timer</p>
-        </router-link>
+          <router-link
+            to="/flashcards"
+            class="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
+          >
+            <Icons name="flashcard" class="w-10 h-10 mb-2" />
+            <h3 class="font-bold mb-1">Flashcards</h3>
+            <p class="text-xs opacity-90">Review your cards</p>
+          </router-link>
 
-        <router-link
-          to="/editor"
-          class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all text-center group"
-        >
-          <div class="text-4xl mb-3">📝</div>
-          <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
-            Take Notes
-          </h3>
-          <p class="text-sm text-gray-600">Create new study material</p>
-        </router-link>
+          <router-link
+            to="/focus"
+            class="bg-gradient-to-br from-cyan-500 to-teal-500 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
+          >
+            <Icons name="timer" class="w-10 h-10 mb-2" />
+            <h3 class="font-bold mb-1">Focus Timer</h3>
+            <p class="text-xs opacity-90">Start a session</p>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import { useGamificationStore, BADGES } from "../stores/gamification";
-import { useAnalyticsStore } from "../stores/analytics";
-import { MLEngine } from "../services/mlEngine";
+import { computed, onMounted } from "vue";
+import { useGamificationStore } from "../stores/gamification";
+import { useAuthStore } from "../stores/auth";
+import Icons from "../components/Icons.vue";
 
 const gamificationStore = useGamificationStore();
-const analyticsStore = useAnalyticsStore();
-
-const predictions = ref<any>(null);
-const loading = ref(true);
+const authStore = useAuthStore();
 
 const level = computed(() => gamificationStore.level);
-const xp = computed(() => gamificationStore.xp);
-const xpToNextLevel = computed(() => gamificationStore.xpToNextLevel);
 const currentStreak = computed(() => gamificationStore.currentStreak);
 const stats = computed(() => gamificationStore.stats);
-const unlockedBadges = computed(() => gamificationStore.unlockedBadges);
-const unlockedBadgesCount = computed(() => unlockedBadges.value.length);
-
-function formatHour(hour: number): string {
-  const suffix = hour >= 12 ? "PM" : "AM";
-  const displayHour = hour % 12 || 12;
-  return `${displayHour}${suffix}`;
-}
-
-async function loadPredictions() {
-  try {
-    loading.value = true;
-    const analytics = await analyticsStore.getUserAnalytics();
-    if (analytics) {
-      predictions.value = await MLEngine.getAllPredictions("user-id", analytics);
-    }
-  } catch (error) {
-    console.error("Error loading predictions:", error);
-  } finally {
-    loading.value = false;
-  }
-}
+const unlockedBadgesCount = computed(() => gamificationStore.unlockedBadges.length);
+const xp = computed(() => gamificationStore.xp);
+const xpToNextLevel = computed(() => gamificationStore.xpToNextLevel);
+const progressPercentage = computed(() => {
+  const currentLevelXP = level.value * 100;
+  const xpInCurrentLevel = xp.value - currentLevelXP;
+  return Math.min((xpInCurrentLevel / 100) * 100, 100);
+});
 
 onMounted(async () => {
-  await gamificationStore.loadUserData();
-  await loadPredictions();
+  // Load user data in background - no blocking
+  gamificationStore.loadUserData();
 });
 </script>

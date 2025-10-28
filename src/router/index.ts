@@ -9,6 +9,13 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      meta: { requiresGuest: true }, // Only show welcome to unauthenticated users
+    },
+    {
+      path: "/onboarding",
+      name: "onboarding",
+      component: () => import("../views/OnboardingView.vue"),
+      meta: { requiresGuest: true }, // Only accessible when not logged in
     },
     {
       path: "/auth",
@@ -69,21 +76,23 @@ router.beforeEach((to, from, next) => {
 
   // Check if route requires authentication
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    console.log("⛔ Redirecting to auth - not authenticated");
-    // Redirect to auth page if not logged in
-    next({ name: "auth" });
+    console.log("⛔ Redirecting to home - not authenticated");
+    // Redirect to welcome/home page if not logged in
+    next({ name: "home" });
+    return;
   }
-  // Check if route is only for guests (like auth page)
-  else if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    console.log("Redirecting to editor - already authenticated");
-    // Redirect to editor if already logged in
-    next({ name: "editor" });
+
+  // Check if route is only for guests (like welcome, onboarding, auth)
+  if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    console.log("🏠 Redirecting to dashboard - already authenticated");
+    // Redirect to dashboard if already logged in
+    next({ name: "dashboard" });
+    return;
   }
+
   // Allow navigation
-  else {
-    console.log("Navigation allowed");
-    next();
-  }
+  console.log("✅ Navigation allowed");
+  next();
 });
 
 export default router;

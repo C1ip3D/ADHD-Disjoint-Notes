@@ -38,7 +38,7 @@ export const BADGES: Badge[] = [
   {
     id: "focus_10",
     name: "Focus Starter",
-    icon: "🎯",
+    icon: "target",
     description: "Complete 10 focus sessions",
     requirement: 10,
     type: "focus",
@@ -47,7 +47,7 @@ export const BADGES: Badge[] = [
   {
     id: "focus_50",
     name: "Focus Master",
-    icon: "🏆",
+    icon: "trophy",
     description: "Complete 50 focus sessions",
     requirement: 50,
     type: "focus",
@@ -56,7 +56,7 @@ export const BADGES: Badge[] = [
   {
     id: "streak_3",
     name: "Getting Consistent",
-    icon: "🔥",
+    icon: "fire",
     description: "Study for 3 days in a row",
     requirement: 3,
     type: "streak",
@@ -65,7 +65,7 @@ export const BADGES: Badge[] = [
   {
     id: "streak_7",
     name: "7-Day Streak",
-    icon: "🌟",
+    icon: "star",
     description: "Study for 7 days in a row",
     requirement: 7,
     type: "streak",
@@ -74,7 +74,7 @@ export const BADGES: Badge[] = [
   {
     id: "streak_30",
     name: "Monthly Champion",
-    icon: "👑",
+    icon: "crown",
     description: "Study for 30 days in a row",
     requirement: 30,
     type: "streak",
@@ -83,7 +83,7 @@ export const BADGES: Badge[] = [
   {
     id: "quiz_5",
     name: "Quiz Novice",
-    icon: "📝",
+    icon: "notes",
     description: "Ace 5 quizzes with 100% score",
     requirement: 5,
     type: "quiz",
@@ -92,7 +92,7 @@ export const BADGES: Badge[] = [
   {
     id: "quiz_10",
     name: "Quiz Champion",
-    icon: "🏅",
+    icon: "medal",
     description: "Ace 10 quizzes with 100% score",
     requirement: 10,
     type: "quiz",
@@ -101,7 +101,7 @@ export const BADGES: Badge[] = [
   {
     id: "flashcard_100",
     name: "Flashcard Enthusiast",
-    icon: "🃏",
+    icon: "flashcard",
     description: "Review 100 flashcards",
     requirement: 100,
     type: "flashcard",
@@ -110,7 +110,7 @@ export const BADGES: Badge[] = [
   {
     id: "flashcard_500",
     name: "Flashcard Ace",
-    icon: "🎴",
+    icon: "flashcard",
     description: "Review 500 flashcards",
     requirement: 500,
     type: "flashcard",
@@ -119,7 +119,7 @@ export const BADGES: Badge[] = [
   {
     id: "notes_10",
     name: "Note Taker",
-    icon: "📚",
+    icon: "book",
     description: "Create 10 notes",
     requirement: 10,
     type: "notes",
@@ -128,7 +128,7 @@ export const BADGES: Badge[] = [
   {
     id: "notes_50",
     name: "Knowledge Builder",
-    icon: "🧠",
+    icon: "brain",
     description: "Create 50 notes",
     requirement: 50,
     type: "notes",
@@ -315,7 +315,7 @@ export const useGamificationStore = defineStore("gamification", () => {
 
   // Check daily login
   async function checkDailyLogin() {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toISOString().split("T")[0] || "";
     const lastLogin = stats.value.lastLoginDate;
 
     if (lastLogin !== today) {
@@ -323,7 +323,7 @@ export const useGamificationStore = defineStore("gamification", () => {
       await awardXP("daily_login");
 
       // Update streak
-      if (lastLogin) {
+      if (lastLogin && today) {
         const lastDate = new Date(lastLogin);
         const todayDate = new Date(today);
         const dayDiff = Math.floor(
