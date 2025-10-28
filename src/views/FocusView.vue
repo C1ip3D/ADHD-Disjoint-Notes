@@ -1,0 +1,53 @@
+<template>
+  <div
+    class="focus-view min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4"
+  >
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-8">
+        <h1
+          class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
+        >
+          Focus Zone
+        </h1>
+        <p class="text-gray-600">Stay focused and boost your productivity</p>
+      </div>
+
+      <FocusTimer />
+
+      <!-- Brain Reset Prompt -->
+      <BrainResetGame
+        v-if="showBrainReset"
+        @complete="handleResetComplete"
+        @skip="handleResetSkip"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
+import FocusTimer from "../components/FocusTimer.vue";
+import BrainResetGame from "../components/BrainResetGame.vue";
+
+const showBrainReset = ref(false);
+
+function handleLaunchBrainReset() {
+  showBrainReset.value = true;
+}
+
+function handleResetComplete() {
+  showBrainReset.value = false;
+}
+
+function handleResetSkip() {
+  showBrainReset.value = false;
+}
+
+onMounted(() => {
+  window.addEventListener("launchBrainReset", handleLaunchBrainReset);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("launchBrainReset", handleLaunchBrainReset);
+});
+</script>

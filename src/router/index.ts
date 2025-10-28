@@ -34,6 +34,24 @@ const router = createRouter({
       component: () => import("../views/MergeView.vue"),
       meta: { requiresAuth: true },
     },
+    {
+      path: "/flashcards",
+      name: "flashcards",
+      component: () => import("../views/FlashcardsView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/focus",
+      name: "focus",
+      component: () => import("../views/FocusView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/DashboardView.vue"),
+      meta: { requiresAuth: true },
+    },
   ],
 });
 

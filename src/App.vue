@@ -22,6 +22,13 @@
             <!-- Authenticated Navigation -->
             <template v-if="authStore.isAuthenticated">
               <router-link
+                to="/dashboard"
+                class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+                active-class="text-blue-600 bg-blue-50"
+              >
+                Dashboard
+              </router-link>
+              <router-link
                 to="/editor"
                 class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
                 active-class="text-blue-600 bg-blue-50"
@@ -36,12 +43,29 @@
                 My Notes
               </router-link>
               <router-link
+                to="/flashcards"
+                class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+                active-class="text-blue-600 bg-blue-50"
+              >
+                Flashcards
+              </router-link>
+              <router-link
+                to="/focus"
+                class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+                active-class="text-blue-600 bg-blue-50"
+              >
+                Focus
+              </router-link>
+              <router-link
                 to="/merge"
                 class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
                 active-class="text-blue-600 bg-blue-50"
               >
                 AI Analyze
               </router-link>
+
+              <!-- XP Badge -->
+              <XPBadge />
 
               <!-- User Menu -->
               <div class="relative" ref="userMenuContainer">
@@ -174,6 +198,14 @@
             class="md:hidden py-3 border-t border-gray-200 space-y-1"
           >
             <router-link
+              to="/dashboard"
+              @click="showMobileMenu = false"
+              class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+              active-class="text-blue-600 bg-blue-50"
+            >
+              Dashboard
+            </router-link>
+            <router-link
               to="/editor"
               @click="showMobileMenu = false"
               class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
@@ -188,6 +220,22 @@
               active-class="text-blue-600 bg-blue-50"
             >
               My Notes
+            </router-link>
+            <router-link
+              to="/flashcards"
+              @click="showMobileMenu = false"
+              class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+              active-class="text-blue-600 bg-blue-50"
+            >
+              Flashcards
+            </router-link>
+            <router-link
+              to="/focus"
+              @click="showMobileMenu = false"
+              class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-xl text-sm font-medium transition-all hover:bg-gray-100"
+              active-class="text-blue-600 bg-blue-50"
+            >
+              Focus
             </router-link>
             <router-link
               to="/merge"
@@ -230,6 +278,9 @@
 
     <!-- AI Chat Assistant (Always Available) -->
     <AIChatAssistant v-if="authStore.isAuthenticated" />
+
+    <!-- Level Up Modal -->
+    <LevelUpModal />
   </div>
 </template>
 
@@ -238,6 +289,8 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { useAuthStore } from "./stores/auth";
 import AIChatAssistant from "./components/AIChatAssistant.vue";
+import XPBadge from "./components/XPBadge.vue";
+import LevelUpModal from "./components/LevelUpModal.vue";
 
 const authStore = useAuthStore();
 const showUserMenu = ref(false);
