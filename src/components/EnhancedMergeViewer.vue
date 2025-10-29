@@ -19,7 +19,12 @@
             :disabled="isExporting"
             class="px-6 py-3 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all font-medium shadow-lg flex items-center gap-2 disabled:opacity-50"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -39,13 +44,18 @@
         <div
           class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-blue-500 mb-6"
         ></div>
-        <h3 class="text-2xl font-bold text-gray-800 mb-2">Analyzing your notes...</h3>
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">
+          Analyzing your notes...
+        </h3>
         <p class="text-gray-500">Creating summary and practice quiz</p>
       </div>
     </div>
 
     <!-- Error -->
-    <div v-else-if="error" class="bg-red-50 rounded-3xl shadow-lg p-8 border-2 border-red-200">
+    <div
+      v-else-if="error"
+      class="bg-red-50 rounded-3xl shadow-lg p-8 border-2 border-red-200"
+    >
       <div class="flex items-start gap-4">
         <svg
           class="w-12 h-12 text-red-500 flex-shrink-0"
@@ -86,12 +96,16 @@
 
       <!-- Practice Quiz Section -->
       <div
-        v-if="processedNote.quizQuestions && processedNote.quizQuestions.length > 0"
+        v-if="
+          processedNote.quizQuestions && processedNote.quizQuestions.length > 0
+        "
         class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl shadow-lg p-12 border-2 border-blue-200"
       >
         <div class="mb-10">
           <h2 class="text-3xl font-bold text-gray-900 mb-3">Practice Quiz</h2>
-          <p class="text-gray-600 text-lg">Test your understanding with these questions:</p>
+          <p class="text-gray-600 text-lg">
+            Test your understanding with these questions:
+          </p>
         </div>
 
         <div class="space-y-8">
@@ -108,7 +122,9 @@
                 >
                   {{ qIndex + 1 }}
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 leading-relaxed pt-1">
+                <h3
+                  class="text-xl font-semibold text-gray-900 leading-relaxed pt-1"
+                >
                   {{ question.question }}
                 </h3>
               </div>
@@ -128,7 +144,8 @@
                     ? oIndex === question.correctAnswer
                       ? 'border-green-500 bg-green-50 text-green-900'
                       : 'border-red-500 bg-red-50 text-red-900'
-                    : oIndex === question.correctAnswer && userAnswers[qIndex] !== undefined
+                    : oIndex === question.correctAnswer &&
+                      userAnswers[qIndex] !== undefined
                     ? 'border-green-500 bg-green-50 text-green-900'
                     : 'border-gray-200 bg-gray-50 text-gray-600',
                 ]"
@@ -154,7 +171,10 @@
                   <span class="flex-1">{{ option }}</span>
 
                   <!-- Checkmark or X -->
-                  <div v-if="userAnswers[qIndex] !== undefined" class="flex-shrink-0">
+                  <div
+                    v-if="userAnswers[qIndex] !== undefined"
+                    class="flex-shrink-0"
+                  >
                     <svg
                       v-if="oIndex === question.correctAnswer"
                       class="w-7 h-7 text-green-600"
@@ -196,11 +216,16 @@
               >
                 <p class="text-green-800 font-semibold text-lg">Correct!</p>
               </div>
-              <div v-else class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+              <div
+                v-else
+                class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg"
+              >
                 <p class="text-red-800 font-semibold text-lg">Incorrect</p>
                 <p class="text-red-700 mt-2">
                   The correct answer is:
-                  <strong>{{ String.fromCharCode(65 + question.correctAnswer) }}</strong>
+                  <strong>{{
+                    String.fromCharCode(65 + question.correctAnswer)
+                  }}</strong>
                 </p>
               </div>
             </div>
@@ -208,7 +233,10 @@
         </div>
 
         <!-- Quiz Score -->
-        <div v-if="quizCompleted" class="mt-10 p-8 bg-white rounded-2xl shadow-md text-center">
+        <div
+          v-if="quizCompleted"
+          class="mt-10 p-8 bg-white rounded-2xl shadow-md text-center"
+        >
           <h3 class="text-2xl font-bold text-gray-900 mb-3">Quiz Complete!</h3>
           <div
             class="text-5xl font-bold mb-4"
@@ -259,7 +287,9 @@
         </svg>
       </div>
       <h3 class="text-3xl font-bold text-gray-900 mb-4">No Notes Selected</h3>
-      <p class="text-gray-500 mb-8 text-lg">Please select notes from your collection to analyze</p>
+      <p class="text-gray-500 mb-8 text-lg">
+        Please select notes from your collection to analyze
+      </p>
       <router-link
         to="/notes"
         class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg gap-3"
@@ -277,7 +307,8 @@ import { marked } from "marked";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useNotesStore } from "../stores/notes";
-import { OpenAIProvider, type ProcessedNote } from "../services/openaiProvider";
+import { secureAI } from "../services/secureAIProvider";
+import type { ProcessedNote } from "../services/aiProvider";
 
 const router = useRouter();
 const route = useRoute();
@@ -290,12 +321,17 @@ const isExporting = ref(false);
 const userAnswers = ref<Record<number, number>>({});
 
 const renderedStructuredContent = computed(() => {
-  return processedNote.value ? marked(processedNote.value.structuredContent) : "";
+  return processedNote.value
+    ? marked(processedNote.value.structuredContent)
+    : "";
 });
 
 const quizCompleted = computed(() => {
   if (!processedNote.value?.quizQuestions) return false;
-  return Object.keys(userAnswers.value).length === processedNote.value.quizQuestions.length;
+  return (
+    Object.keys(userAnswers.value).length ===
+    processedNote.value.quizQuestions.length
+  );
 });
 
 const correctAnswersCount = computed(() => {
@@ -306,9 +342,14 @@ const correctAnswersCount = computed(() => {
 });
 
 const quizScore = computed(() => {
-  if (!processedNote.value?.quizQuestions || processedNote.value.quizQuestions.length === 0)
+  if (
+    !processedNote.value?.quizQuestions ||
+    processedNote.value.quizQuestions.length === 0
+  )
     return 0;
-  return Math.round((correctAnswersCount.value / processedNote.value.quizQuestions.length) * 100);
+  return Math.round(
+    (correctAnswersCount.value / processedNote.value.quizQuestions.length) * 100
+  );
 });
 
 function selectAnswer(questionIndex: number, optionIndex: number) {
@@ -325,29 +366,28 @@ async function analyzeNotes() {
   const noteIds = route.query.notes as string;
   if (!noteIds) return;
 
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    error.value = "Please configure your OpenAI API key in Settings first.";
-    return;
-  }
-
   loading.value = true;
   error.value = null;
 
   try {
-    const selectedNotes = notesStore.notes.filter((note) => noteIds.split(",").includes(note.id));
+    const selectedNotes = notesStore.notes.filter((note) =>
+      noteIds.split(",").includes(note.id)
+    );
 
     if (selectedNotes.length === 0) {
       error.value = "No notes found";
       return;
     }
 
-    const aiProvider = new OpenAIProvider(import.meta.env.VITE_OPENAI_API_KEY || "");
-    processedNote.value = await aiProvider.analyzeNotes(
+    // Use secure AI provider - API key stays on backend!
+    processedNote.value = await secureAI.analyzeNotes(
       selectedNotes,
       selectedNotes[0]?.subject || "General"
     );
   } catch (err: any) {
-    error.value = err.message || "Failed to analyze notes. Please check your API key.";
+    error.value =
+      err.message ||
+      "Failed to analyze notes. Please ensure the backend server is running.";
     console.error("Error analyzing notes:", err);
   } finally {
     loading.value = false;

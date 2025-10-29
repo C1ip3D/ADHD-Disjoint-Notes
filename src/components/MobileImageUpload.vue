@@ -6,7 +6,12 @@
         @click="takePhoto"
         class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg active:scale-95"
       >
-        <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-10 h-10 mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -27,7 +32,12 @@
         @click="pickFromGallery"
         class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-cyan-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-blue-700 transition-all shadow-lg active:scale-95"
       >
-        <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-10 h-10 mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -84,7 +94,11 @@
         :key="index"
         class="relative group rounded-xl overflow-hidden shadow-lg"
       >
-        <img :src="image.preview" :alt="`Note ${index + 1}`" class="w-full h-40 object-cover" />
+        <img
+          :src="image.preview"
+          :alt="`Note ${index + 1}`"
+          class="w-full h-40 object-cover"
+        />
         <div
           class="absolute inset-0 bg-black/50 opacity-0 group-active:opacity-100 transition-opacity flex items-center justify-center gap-2"
         >
@@ -113,7 +127,12 @@
             class="p-3 bg-white rounded-xl active:scale-95 transition-transform"
             title="Remove"
           >
-            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-6 h-6 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -141,7 +160,12 @@
           v-else-if="image.analyzed"
           class="absolute top-2 right-2 p-2 bg-green-500 rounded-xl shadow-lg"
         >
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-5 h-5 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -159,7 +183,12 @@
       class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-5 border-2 border-blue-200"
     >
       <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
-        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -169,7 +198,9 @@
         </svg>
         AI-Extracted Text
       </h3>
-      <div class="text-gray-700 whitespace-pre-wrap mb-4 max-h-48 overflow-y-auto">
+      <div
+        class="text-gray-700 whitespace-pre-wrap mb-4 max-h-48 overflow-y-auto"
+      >
         {{ analyzedText }}
       </div>
       <button
@@ -187,7 +218,7 @@ import { ref, onMounted } from "vue";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import OpenAI from "openai";
+import { secureAI } from "../services/secureAIProvider";
 
 interface UploadedImage {
   file?: File;
@@ -292,10 +323,6 @@ function removeImage(index: number) {
 }
 
 async function analyzeImage(index: number) {
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    return;
-  }
-
   await vibrate();
 
   const image = images.value[index];
@@ -305,39 +332,18 @@ async function analyzeImage(index: number) {
   isAnalyzing.value = true;
 
   try {
-    const openai = new OpenAI({
-      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-      dangerouslyAllowBrowser: true,
-    });
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Please extract and transcribe all text from this image of notes. Format it clearly and maintain the structure. If there are diagrams or equations, describe them or convert them to markdown/LaTeX format.",
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: image.preview,
-              },
-            },
-          ],
-        },
-      ],
-      max_tokens: 1500,
-    });
-
-    const extractedText = response.choices[0]?.message?.content || "";
+    // Use secure AI provider - API key stays on backend!
+    const extractedText = await secureAI.analyzeImage(
+      image.preview,
+      "Please extract and transcribe all text from this image of notes. Format it clearly and maintain the structure. If there are diagrams or equations, describe them or convert them to markdown/LaTeX format."
+    );
     analyzedText.value = extractedText;
     image.analyzed = true;
     await vibrate(ImpactStyle.Medium);
   } catch (error: any) {
     console.error("Error analyzing image:", error);
+    analyzedText.value =
+      "Failed to analyze image. Please ensure the backend server is running.";
   } finally {
     image.isAnalyzing = false;
     isAnalyzing.value = false;

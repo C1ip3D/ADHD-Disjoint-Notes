@@ -6,7 +6,12 @@
         @click="openCamera"
         class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg"
       >
-        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-8 h-8 mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -27,7 +32,12 @@
         @click="imageInput?.click()"
         class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-blue-700 transition-all shadow-lg"
       >
-        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-8 h-8 mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -42,7 +52,12 @@
         @click="docInput?.click()"
         class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl hover:from-green-600 hover:to-green-700 transition-all shadow-lg"
       >
-        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-8 h-8 mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -99,7 +114,9 @@
         <p class="text-sm font-medium text-gray-700 mb-1">
           {{ isDragging ? "Drop files here" : "Upload files" }}
         </p>
-        <p class="text-xs text-gray-500">Images, PDFs, Word, Excel, PowerPoint, Text files</p>
+        <p class="text-xs text-gray-500">
+          Images, PDFs, Word, Excel, PowerPoint, Text files
+        </p>
       </div>
     </div>
 
@@ -119,7 +136,12 @@
                 @click="closeCamera"
                 class="p-2 hover:bg-white/20 rounded-xl transition-colors"
               >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -142,7 +164,12 @@
                   @click="capturePhoto"
                   class="px-8 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all font-semibold shadow-lg flex items-center gap-2"
                 >
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -172,7 +199,11 @@
         :key="index"
         class="relative group rounded-xl overflow-hidden shadow-lg"
       >
-        <img :src="image.preview" :alt="`Note ${index + 1}`" class="w-full h-32 object-cover" />
+        <img
+          :src="image.preview"
+          :alt="`Note ${index + 1}`"
+          class="w-full h-32 object-cover"
+        />
         <div
           class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2"
         >
@@ -201,7 +232,12 @@
             class="p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors"
             title="Remove"
           >
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -229,7 +265,12 @@
           v-else-if="image.analyzed"
           class="absolute top-2 right-2 p-1.5 bg-green-500 rounded-lg"
         >
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-4 h-4 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -246,8 +287,15 @@
       v-if="analyzedText"
       class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200"
     >
-      <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <h3
+        class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2"
+      >
+        <svg
+          class="w-5 h-5 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -257,7 +305,9 @@
         </svg>
         AI-Extracted Text
       </h3>
-      <div class="prose max-w-none text-gray-700 whitespace-pre-wrap">{{ analyzedText }}</div>
+      <div class="prose max-w-none text-gray-700 whitespace-pre-wrap">
+        {{ analyzedText }}
+      </div>
       <button
         @click="insertText"
         class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
@@ -270,7 +320,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import OpenAI from "openai";
+import { secureAI } from "../services/secureAIProvider";
 
 interface UploadedImage {
   file?: File;
@@ -374,9 +424,16 @@ function getDocumentIcon(mimeType: string): string {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ef4444' viewBox='0 0 24 24'%3E%3Cpath d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/%3E%3C/svg%3E";
   } else if (mimeType.includes("word") || mimeType.includes("document")) {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%232563eb' viewBox='0 0 24 24'%3E%3Cpath d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/%3E%3C/svg%3E";
-  } else if (mimeType.includes("sheet") || mimeType.includes("excel") || mimeType.includes("csv")) {
+  } else if (
+    mimeType.includes("sheet") ||
+    mimeType.includes("excel") ||
+    mimeType.includes("csv")
+  ) {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2316a34a' viewBox='0 0 24 24'%3E%3Cpath d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/%3E%3C/svg%3E";
-  } else if (mimeType.includes("powerpoint") || mimeType.includes("presentation")) {
+  } else if (
+    mimeType.includes("powerpoint") ||
+    mimeType.includes("presentation")
+  ) {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ea580c' viewBox='0 0 24 24'%3E%3Cpath d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/%3E%3C/svg%3E";
   } else if (mimeType.includes("text")) {
     return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%239333ea' viewBox='0 0 24 24'%3E%3Cpath d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/%3E%3C/svg%3E";
@@ -418,10 +475,6 @@ function removeImage(index: number) {
 }
 
 async function analyzeImage(index: number) {
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    return;
-  }
-
   const image = images.value[index];
   if (!image) return;
 
@@ -429,38 +482,17 @@ async function analyzeImage(index: number) {
   isAnalyzing.value = true;
 
   try {
-    const openai = new OpenAI({
-      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-      dangerouslyAllowBrowser: true,
-    });
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Please extract and transcribe all text from this image of notes. Format it clearly and maintain the structure. If there are diagrams or equations, describe them or convert them to markdown/LaTeX format.",
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: image.preview,
-              },
-            },
-          ],
-        },
-      ],
-      max_tokens: 1500,
-    });
-
-    const extractedText = response.choices[0]?.message?.content || "";
+    // Use secure AI provider - API key stays on backend!
+    const extractedText = await secureAI.analyzeImage(
+      image.preview,
+      "Please extract and transcribe all text from this image of notes. Format it clearly and maintain the structure. If there are diagrams or equations, describe them or convert them to markdown/LaTeX format."
+    );
     analyzedText.value = extractedText;
     image.analyzed = true;
   } catch (error: any) {
     console.error("Error analyzing image:", error);
+    analyzedText.value =
+      "Failed to analyze image. Please ensure the backend server is running.";
   } finally {
     image.isAnalyzing = false;
     isAnalyzing.value = false;

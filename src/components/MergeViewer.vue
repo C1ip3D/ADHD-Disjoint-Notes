@@ -1,6 +1,8 @@
 <template>
   <div class="max-w-6xl mx-auto p-6 space-y-6">
-    <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
+    <div
+      class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50"
+    >
       <h1
         class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
       >
@@ -35,7 +37,9 @@
             </svg>
           </div>
         </div>
-        <p class="text-gray-700 font-medium mt-6 text-lg">Analyzing your notes...</p>
+        <p class="text-gray-700 font-medium mt-6 text-lg">
+          Analyzing your notes...
+        </p>
         <p class="text-gray-500 text-sm mt-2">This may take a moment</p>
       </div>
     </div>
@@ -49,7 +53,12 @@
         <div
           class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center"
         >
-          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-6 h-6 text-red-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -59,7 +68,9 @@
           </svg>
         </div>
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-red-800 mb-1">Analysis Failed</h3>
+          <h3 class="text-lg font-semibold text-red-800 mb-1">
+            Analysis Failed
+          </h3>
           <p class="text-red-700">{{ error }}</p>
           <button
             @click="goBack"
@@ -77,11 +88,18 @@
       <div
         class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
       >
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+        <h2
+          class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3"
+        >
           <div
             class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
           >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -92,7 +110,10 @@
           </div>
           Structured Summary
         </h2>
-        <div class="prose prose-lg max-w-none" v-html="renderedStructuredContent"></div>
+        <div
+          class="prose prose-lg max-w-none"
+          v-html="renderedStructuredContent"
+        ></div>
       </div>
 
       <!-- Connections -->
@@ -100,11 +121,18 @@
         v-if="processedNote.connections.length > 0"
         class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
       >
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+        <h2
+          class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3"
+        >
           <div
             class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center"
           >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -131,11 +159,18 @@
         v-if="processedNote.gaps.length > 0"
         class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
       >
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+        <h2
+          class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3"
+        >
           <div
             class="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center"
           >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -162,11 +197,18 @@
         v-if="processedNote.suggestions.length > 0"
         class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-gray-200/50 hover:shadow-2xl transition-all"
       >
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+        <h2
+          class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3"
+        >
           <div
             class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center"
           >
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -189,13 +231,20 @@
       </div>
 
       <!-- Actions -->
-      <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50">
+      <div
+        class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-gray-200/50"
+      >
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <button
             @click="exportNotes"
             class="px-8 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-105"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -232,12 +281,19 @@
           </svg>
         </div>
         <h3 class="text-2xl font-bold text-gray-900 mb-3">No notes selected</h3>
-        <p class="text-gray-600 mb-6">Select notes from your collection to analyze them with AI</p>
+        <p class="text-gray-600 mb-6">
+          Select notes from your collection to analyze them with AI
+        </p>
         <router-link
           to="/notes"
           class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all font-semibold shadow-lg hover:shadow-xl gap-2"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -257,7 +313,8 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { marked } from "marked";
 import { useNotesStore } from "../stores/notes";
-import { OpenAIProvider, type ProcessedNote } from "../services/openaiProvider";
+import { secureAI } from "../services/secureAIProvider";
+import type { ProcessedNote } from "../services/aiProvider";
 
 const router = useRouter();
 const route = useRoute();
@@ -268,38 +325,37 @@ const error = ref<string | null>(null);
 const processedNote = ref<ProcessedNote | null>(null);
 
 const renderedStructuredContent = computed(() => {
-  return processedNote.value ? marked(processedNote.value.structuredContent) : "";
+  return processedNote.value
+    ? marked(processedNote.value.structuredContent)
+    : "";
 });
 
 async function analyzeNotes() {
   const noteIds = route.query.notes as string;
   if (!noteIds) return;
 
-  // Check if API key is configured
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    error.value = "Please configure your OpenAI API key in Settings first.";
-    return;
-  }
-
   loading.value = true;
   error.value = null;
 
   try {
-    const selectedNotes = notesStore.notes.filter((note) => noteIds.split(",").includes(note.id));
+    const selectedNotes = notesStore.notes.filter((note) =>
+      noteIds.split(",").includes(note.id)
+    );
 
     if (selectedNotes.length === 0) {
       error.value = "No notes found";
       return;
     }
 
-    // Use real OpenAI provider with user's API key
-    const aiProvider = new OpenAIProvider(import.meta.env.VITE_OPENAI_API_KEY || "");
-    processedNote.value = await aiProvider.analyzeNotes(
+    // Use secure AI provider - API key stays on backend!
+    processedNote.value = await secureAI.analyzeNotes(
       selectedNotes,
       selectedNotes[0]?.subject || "General"
     );
   } catch (err: any) {
-    error.value = err.message || "Failed to analyze notes. Please check your API key.";
+    error.value =
+      err.message ||
+      "Failed to analyze notes. Please ensure the backend server is running.";
     console.error("Error analyzing notes:", err);
   } finally {
     loading.value = false;

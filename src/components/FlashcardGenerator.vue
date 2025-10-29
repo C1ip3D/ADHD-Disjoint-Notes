@@ -6,7 +6,12 @@
         :disabled="!noteContent || generating"
         class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -16,11 +21,15 @@
         </svg>
         Generate Flashcards
       </button>
-      <p class="text-sm text-gray-500 mt-2">AI will extract key concepts from your notes</p>
+      <p class="text-sm text-gray-500 mt-2">
+        AI will extract key concepts from your notes
+      </p>
     </div>
 
     <div v-if="generating" class="text-center py-8">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"
+      ></div>
       <p class="text-gray-600 mt-4">Generating flashcards...</p>
       <p class="text-sm text-gray-500">This may take a moment</p>
     </div>
@@ -35,7 +44,12 @@
           :disabled="saving"
           class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all font-medium flex items-center gap-2"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -60,7 +74,9 @@
                 <p class="font-semibold text-gray-900">{{ card.term }}</p>
               </div>
               <div>
-                <label class="text-xs font-medium text-gray-500">Definition</label>
+                <label class="text-xs font-medium text-gray-500"
+                  >Definition</label
+                >
                 <p class="text-gray-700">{{ card.definition }}</p>
               </div>
               <div v-if="card.example">
@@ -72,7 +88,12 @@
               @click="removeCard(index)"
               class="text-red-500 hover:text-red-700 transition-colors"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -86,7 +107,10 @@
       </div>
     </div>
 
-    <div v-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+    <div
+      v-if="error"
+      class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700"
+    >
       {{ error }}
     </div>
 
@@ -94,7 +118,12 @@
       v-if="saved"
       class="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700 flex items-center gap-2"
     >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        class="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -109,7 +138,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { OpenAIProvider } from "../services/openaiProvider";
+import { secureAI } from "../services/secureAIProvider";
 import { useFlashcardsStore } from "../stores/flashcards";
 import { useAuthStore } from "../stores/auth";
 import { XPTracker } from "../services/xpTracker";
@@ -117,7 +146,6 @@ import { XPTracker } from "../services/xpTracker";
 const props = defineProps<{
   noteContent: string;
   noteId: string;
-  apiKey: string;
 }>();
 
 const flashcardsStore = useFlashcardsStore();
@@ -128,7 +156,9 @@ const generated = ref(false);
 const saving = ref(false);
 const saved = ref(false);
 const error = ref<string | null>(null);
-const generatedCards = ref<Array<{ term: string; definition: string; example?: string }>>([]);
+const generatedCards = ref<
+  Array<{ term: string; definition: string; example?: string }>
+>([]);
 
 async function generateFlashcards() {
   generating.value = true;
@@ -136,34 +166,8 @@ async function generateFlashcards() {
   error.value = null;
 
   try {
-    const provider = new OpenAIProvider(props.apiKey);
-
-    // @ts-ignore - accessing private openai property for flashcard generation
-    const response = await provider.openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `You are a flashcard generator. Extract 10-15 key concepts from the provided notes and create flashcard pairs.
-
-Format each flashcard EXACTLY as:
-Q: [question or term]
-A: [answer or definition]
-EXAMPLE: [optional example]
-
----
-
-Ensure each flashcard is clear, concise, and tests one concept.`,
-        },
-        {
-          role: "user",
-          content: `Create flashcards from these notes:\n\n${props.noteContent}`,
-        },
-      ],
-      temperature: 0.3,
-    });
-
-    const content = response.choices[0]?.message?.content || "";
+    // Use secure AI provider - API key stays on backend!
+    const content = await secureAI.generateFlashcards(props.noteContent);
     generatedCards.value = parseFlashcards(content);
 
     if (generatedCards.value.length === 0) {
@@ -173,7 +177,8 @@ Ensure each flashcard is clear, concise, and tests one concept.`,
     }
   } catch (err) {
     console.error("Error generating flashcards:", err);
-    error.value = "Failed to generate flashcards. Please try again.";
+    error.value =
+      "Failed to generate flashcards. Please ensure the backend server is running.";
   } finally {
     generating.value = false;
   }
@@ -182,7 +187,8 @@ Ensure each flashcard is clear, concise, and tests one concept.`,
 function parseFlashcards(
   content: string
 ): Array<{ term: string; definition: string; example?: string }> {
-  const cards: Array<{ term: string; definition: string; example?: string }> = [];
+  const cards: Array<{ term: string; definition: string; example?: string }> =
+    [];
   const sections = content.split("---").filter((s) => s.trim());
 
   sections.forEach((section) => {

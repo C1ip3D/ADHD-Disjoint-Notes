@@ -185,7 +185,8 @@ let detector: any = null;
 async function getDetector() {
   if (!detector) {
     const { SubjectDetector } = await import("../services/subjectDetector");
-    detector = new SubjectDetector(import.meta.env.VITE_OPENAI_API_KEY);
+    // SubjectDetector no longer needs API key - it uses backend
+    detector = new SubjectDetector();
   }
   return detector;
 }

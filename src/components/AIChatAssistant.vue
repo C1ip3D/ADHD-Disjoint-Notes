@@ -38,7 +38,12 @@
             @click="isOpen = false"
             class="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg sm:rounded-xl transition-colors"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -73,10 +78,14 @@
                 ></path>
               </svg>
             </div>
-            <h4 class="font-bold text-sm sm:text-base text-gray-800 mb-1 sm:mb-2">
+            <h4
+              class="font-bold text-sm sm:text-base text-gray-800 mb-1 sm:mb-2"
+            >
               Hi! I'm your AI Assistant
             </h4>
-            <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Ask me about:</p>
+            <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+              Ask me about:
+            </p>
             <div class="space-y-2">
               <button
                 @click="askQuestion('Summarize my recent notes')"
@@ -227,7 +236,7 @@ import { ref, nextTick, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 import { marked } from "marked";
 import { useNotesStore } from "../stores/notes";
-import OpenAI from "openai";
+import { secureAI } from "../services/secureAIProvider";
 
 interface Message {
   role: "user" | "assistant";
@@ -266,8 +275,12 @@ const fullNotesContext = computed(() => {
     .slice(0, 20) // Last 20 notes
     .map((note, index) => {
       const preview =
-        note.content.length > 500 ? note.content.substring(0, 500) + "..." : note.content;
-      return `[Note ${index + 1}] Subject: ${note.subject}\nContent: ${preview}`;
+        note.content.length > 500
+          ? note.content.substring(0, 500) + "..."
+          : note.content;
+      return `[Note ${index + 1}] Subject: ${
+        note.subject
+      }\nContent: ${preview}`;
     })
     .join("\n\n");
 
@@ -297,10 +310,6 @@ function toggleChat() {
 async function sendMessage() {
   if (!inputMessage.value.trim() || isLoading.value) return;
 
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    return;
-  }
-
   const userMessage = inputMessage.value.trim();
   messages.value.push({ role: "user", content: userMessage });
   inputMessage.value = "";
@@ -309,11 +318,6 @@ async function sendMessage() {
   await scrollToBottom();
 
   try {
-    const openai = new OpenAI({
-      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-      dangerouslyAllowBrowser: true,
-    });
-
     const systemMessage = `You are an intelligent AI assistant for Focusly, a note-taking app designed for ADHD students.
 
 CURRENT CONTEXT:
@@ -340,21 +344,16 @@ IMPORTANT:
 
 Current page context: The user is viewing the ${currentPage.value}.`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemMessage },
-        ...messages.value.map((m) => ({
-          role: m.role,
-          content: m.content,
-        })),
-      ],
-      temperature: 0.7,
-      max_tokens: 500,
-    });
+    // Use secure AI provider - API key stays on backend!
+    const chatMessages = [
+      { role: "system", content: systemMessage },
+      ...messages.value.map((m) => ({
+        role: m.role,
+        content: m.content,
+      })),
+    ];
 
-    const aiMessage =
-      response.choices[0]?.message?.content || "I'm sorry, I couldn't process that.";
+    const aiMessage = await secureAI.chat(chatMessages);
     messages.value.push({ role: "assistant", content: aiMessage });
 
     if (!isOpen.value) {
@@ -366,7 +365,8 @@ Current page context: The user is viewing the ${currentPage.value}.`;
     console.error("Chat error:", error);
     messages.value.push({
       role: "assistant",
-      content: "Sorry, I encountered an error. Please try again.",
+      content:
+        "Sorry, I encountered an error. Please ensure the backend server is running.",
     });
   } finally {
     isLoading.value = false;
