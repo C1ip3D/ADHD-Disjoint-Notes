@@ -1,5 +1,5 @@
 // Use environment variable if available, fallback to localhost
-const ML_API = import.meta.env.VITE_ML_API_URL || "http://localhost:5000";
+const ML_API = import.meta.env.VITE_ML_API_URL || "http://localhost:5001";
 
 export interface NoteFormatPrediction {
   recommendedFormat: string;

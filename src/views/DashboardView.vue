@@ -25,6 +25,26 @@
               </h3>
               <p class="text-sm text-gray-600">{{ authStore.user?.email }}</p>
             </div>
+            <button
+              v-if="!hasCanvasCourses"
+              @click="showCanvasSetup = true"
+              class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
+              </svg>
+              Setup Canvas
+            </button>
           </div>
 
           <!-- Progress Bar -->
@@ -65,25 +85,27 @@
       <div v-if="hasCanvasCourses">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-lg font-semibold text-gray-900">My Classes</h2>
-          <button
-            @click="showCanvasSetup = true"
-            class="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
-          >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div class="flex items-center gap-2">
+            <button
+              @click="showCanvasSetup = true"
+              class="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              ></path>
-            </svg>
-            Sync
-          </button>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+              Re-sync
+            </button>
+          </div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-5">
           <div class="flex flex-wrap gap-2">
@@ -139,6 +161,9 @@
         </div>
       </div>
 
+      <!-- Due Soon Widget (Canvas Assignments) -->
+      <DueSoonWidget v-if="hasCanvasCourses" />
+
       <!-- Quick Actions -->
       <div>
         <h2 class="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h2>
@@ -168,6 +193,28 @@
             <Icons name="timer" class="w-10 h-10 mb-2" />
             <h3 class="font-bold mb-1">Focus Timer</h3>
             <p class="text-xs opacity-90">Start a session</p>
+          </router-link>
+
+          <router-link
+            v-if="hasCanvasCourses"
+            to="/canvas"
+            class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
+          >
+            <svg
+              class="w-10 h-10 mb-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              ></path>
+            </svg>
+            <h3 class="font-bold mb-1">Canvas</h3>
+            <p class="text-xs opacity-90">Grades & assignments</p>
           </router-link>
 
           <router-link
@@ -216,6 +263,7 @@ import { useGamificationStore } from "../stores/gamification";
 import { useAuthStore } from "../stores/auth";
 import { useSettingsStore } from "../stores/settings";
 import Icons from "../components/Icons.vue";
+import DueSoonWidget from "../components/DueSoonWidget.vue";
 
 // Lazy load Canvas modal only when needed
 const CanvasSetupModal = defineAsyncComponent(
@@ -254,9 +302,7 @@ const canvasSetupCompleted = computed(
 
 function handleCanvasSkip() {
   showCanvasSetup.value = false;
-  // Mark as completed even if skipped, so we don't show the prompt again
-  settingsStore.settings.canvasSetupCompleted = true;
-  settingsStore.saveSettings();
+  // Don't mark as completed if skipped - user might want to set it up later
 }
 
 function handleCanvasSuccess() {
@@ -268,9 +314,13 @@ onMounted(async () => {
   gamificationStore.loadUserData();
   settingsStore.loadSettings();
 
-  // Show Canvas setup on first login if not completed
+  // Show Canvas setup on first visit if not completed
+  // Only auto-show if user has never seen it before (no canvas URL set at all)
   setTimeout(() => {
-    if (!settingsStore.settings.canvasSetupCompleted) {
+    const hasNeverSetup =
+      !settingsStore.settings.canvasSetupCompleted &&
+      !settingsStore.settings.canvasUrl;
+    if (hasNeverSetup) {
       showCanvasSetup.value = true;
     }
   }, 1000);

@@ -65,6 +65,12 @@ const router = createRouter({
       component: () => import("../views/LearningCenterView.vue"),
       meta: { requiresAuth: true },
     },
+    {
+      path: "/canvas",
+      name: "canvas",
+      component: () => import("../views/CanvasView.vue"),
+      meta: { requiresAuth: true },
+    },
   ],
 });
 
