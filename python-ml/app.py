@@ -5,6 +5,10 @@ from collections import defaultdict
 import requests
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load .env file for local development (Render uses Environment Variables directly)
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
