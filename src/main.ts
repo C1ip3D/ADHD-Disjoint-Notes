@@ -1,14 +1,21 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
-const app = createApp(App)
+// Optimize performance
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+// Use performance-optimized pinia
+const pinia = createPinia();
 
-app.mount('#app')
+app.use(pinia);
+app.use(router);
+
+// Disable production tips for faster startup
+app.config.performance = false;
+
+app.mount("#app");

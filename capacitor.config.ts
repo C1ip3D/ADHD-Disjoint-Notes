@@ -15,6 +15,8 @@ const config: CapacitorConfig = {
     preferredContentMode: "mobile",
     // Disable limitsNavigationsToAppBoundDomains for faster navigation
     limitsNavigationsToAppBoundDomains: false,
+    // Enable automatic scrolling
+    scrollEnabled: true,
   },
   android: {
     // Enable hardware acceleration
