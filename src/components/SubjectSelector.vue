@@ -1,7 +1,10 @@
 <template>
   <div class="space-y-3">
     <!-- Subject Detection Results -->
-    <div v-if="detectionResult" class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div
+      v-if="detectionResult"
+      class="bg-blue-50 border border-blue-200 rounded-lg p-4"
+    >
       <div class="flex items-start">
         <svg
           class="w-5 h-5 text-blue-500 mt-0.5 mr-3"
@@ -43,7 +46,9 @@
 
           <!-- Alternative Subjects -->
           <div
-            v-if="showAlternatives && detectionResult.alternativeSubjects.length > 0"
+            v-if="
+              showAlternatives && detectionResult.alternativeSubjects.length > 0
+            "
             class="mt-3"
           >
             <p class="text-xs text-blue-600 mb-2">Other possibilities:</p>
@@ -64,20 +69,44 @@
 
     <!-- Manual Subject Selection -->
     <div class="flex items-center space-x-3">
-      <label class="text-sm font-medium text-gray-700">Subject:</label>
+      <label class="text-sm font-medium text-gray-700">
+        {{ hasCanvasCourses ? "Class:" : "Subject:" }}
+      </label>
       <div class="flex-1">
         <select
           :value="selectedSubject"
-          @change="$emit('update:selectedSubject', ($event.target as HTMLSelectElement).value)"
+          @change="
+            $emit(
+              'update:selectedSubject',
+              ($event.target as HTMLSelectElement).value
+            )
+          "
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white text-gray-900"
         >
-          <option value="General" class="text-gray-900">General</option>
-          <option value="Math" class="text-gray-900">Math</option>
-          <option value="Science" class="text-gray-900">Science</option>
-          <option value="History" class="text-gray-900">History</option>
-          <option value="Literature" class="text-gray-900">Literature</option>
-          <option value="Language" class="text-gray-900">Language</option>
-          <option value="Other" class="text-gray-900">Other</option>
+          <!-- Canvas Courses if available -->
+          <template v-if="hasCanvasCourses">
+            <option value="General" class="text-gray-900">
+              General (No Class)
+            </option>
+            <option
+              v-for="course in canvasCourses"
+              :key="course.id"
+              :value="course.name"
+              class="text-gray-900"
+            >
+              {{ course.name }}
+            </option>
+          </template>
+          <!-- Fallback to default subjects -->
+          <template v-else>
+            <option value="General" class="text-gray-900">General</option>
+            <option value="Math" class="text-gray-900">Math</option>
+            <option value="Science" class="text-gray-900">Science</option>
+            <option value="History" class="text-gray-900">History</option>
+            <option value="Literature" class="text-gray-900">Literature</option>
+            <option value="Language" class="text-gray-900">Language</option>
+            <option value="Other" class="text-gray-900">Other</option>
+          </template>
         </select>
       </div>
       <button
@@ -106,7 +135,13 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
           ></path>
         </svg>
-        <svg v-else class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          v-else
+          class="w-4 h-4 mr-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -141,8 +176,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { SubjectDetector, type SubjectDetectionResult } from "../services/subjectDetector";
+import { ref, computed } from "vue";
+import type { SubjectDetectionResult } from "../services/subjectDetector";
+import { useSettingsStore } from "../stores/settings";
+
+// Lazy load subject detector to reduce initial bundle
+let detector: any = null;
+async function getDetector() {
+  if (!detector) {
+    const { SubjectDetector } = await import("../services/subjectDetector");
+    detector = new SubjectDetector(import.meta.env.VITE_OPENAI_API_KEY);
+  }
+  return detector;
+}
 
 const props = defineProps<{
   selectedSubject: string;
@@ -153,11 +199,20 @@ const emit = defineEmits<{
   "update:selectedSubject": [value: string];
 }>();
 
-const detector = new SubjectDetector(import.meta.env.VITE_OPENAI_API_KEY);
+const settingsStore = useSettingsStore();
 const detectionResult = ref<SubjectDetectionResult | null>(null);
 const isDetecting = ref(false);
 const error = ref<string | null>(null);
 const showAlternatives = ref(false);
+
+// Canvas integration
+const hasCanvasCourses = computed(() => {
+  return settingsStore.settings.canvasCourses.length > 0;
+});
+
+const canvasCourses = computed(() => {
+  return settingsStore.settings.canvasCourses;
+});
 
 async function detectSubject() {
   if (!props.noteContent.trim()) {
@@ -170,6 +225,7 @@ async function detectSubject() {
   detectionResult.value = null;
 
   try {
+    const detector = await getDetector();
     const result = await detector.detectSubject(props.noteContent);
     detectionResult.value = result;
 

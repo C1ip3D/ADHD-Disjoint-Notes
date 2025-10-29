@@ -4,6 +4,12 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { useAuthStore } from "./auth";
 
+export interface CanvasCourse {
+  id: number;
+  name: string;
+  course_code: string;
+}
+
 export interface UserSettings {
   // Visual settings
   font: "inter" | "dyslexic" | "atkinson";
@@ -24,6 +30,13 @@ export interface UserSettings {
   autoStartBreaks: boolean;
   soundEnabled: boolean;
   hapticEnabled: boolean;
+
+  // Canvas LMS Integration
+  canvasUrl: string;
+  canvasToken: string;
+  canvasCourses: CanvasCourse[];
+  canvasSetupCompleted: boolean;
+  canvasLastSync: Date | null;
 }
 
 export const DEFAULT_SETTINGS: UserSettings = {
@@ -41,6 +54,11 @@ export const DEFAULT_SETTINGS: UserSettings = {
   autoStartBreaks: false,
   soundEnabled: true,
   hapticEnabled: true,
+  canvasUrl: "",
+  canvasToken: "",
+  canvasCourses: [],
+  canvasSetupCompleted: false,
+  canvasLastSync: null,
 };
 
 export const useSettingsStore = defineStore("settings", () => {
@@ -102,7 +120,10 @@ export const useSettingsStore = defineStore("settings", () => {
   }
 
   // Update setting
-  async function updateSetting<K extends keyof UserSettings>(key: K, value: UserSettings[K]) {
+  async function updateSetting<K extends keyof UserSettings>(
+    key: K,
+    value: UserSettings[K]
+  ) {
     settings.value[key] = value;
     await saveSettings();
     applySettings();
@@ -121,7 +142,10 @@ export const useSettingsStore = defineStore("settings", () => {
     root.style.setProperty("--font-size", `${settings.value.fontSize}px`);
 
     // Line spacing
-    root.style.setProperty("--line-spacing", settings.value.lineSpacing.toString());
+    root.style.setProperty(
+      "--line-spacing",
+      settings.value.lineSpacing.toString()
+    );
 
     // High contrast
     if (settings.value.highContrast) {
@@ -152,6 +176,34 @@ export const useSettingsStore = defineStore("settings", () => {
     applySettings();
   }
 
+  // Canvas LMS methods
+  async function updateCanvasSettings(
+    canvasUrl: string,
+    canvasToken: string,
+    courses: CanvasCourse[]
+  ) {
+    settings.value.canvasUrl = canvasUrl;
+    settings.value.canvasToken = canvasToken;
+    settings.value.canvasCourses = courses;
+    settings.value.canvasSetupCompleted = true;
+    settings.value.canvasLastSync = new Date();
+    await saveSettings();
+  }
+
+  async function syncCanvasCourses(courses: CanvasCourse[]) {
+    settings.value.canvasCourses = courses;
+    settings.value.canvasLastSync = new Date();
+    await saveSettings();
+  }
+
+  function clearCanvasSettings() {
+    settings.value.canvasUrl = "";
+    settings.value.canvasToken = "";
+    settings.value.canvasCourses = [];
+    settings.value.canvasSetupCompleted = false;
+    settings.value.canvasLastSync = null;
+  }
+
   // Watch for changes
   watch(
     settings,
@@ -169,5 +221,8 @@ export const useSettingsStore = defineStore("settings", () => {
     updateSetting,
     resetToDefaults,
     applySettings,
+    updateCanvasSettings,
+    syncCanvasCourses,
+    clearCanvasSettings,
   };
 });
