@@ -1,11 +1,52 @@
 <template>
   <div
     class="dashboard-view min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 px-4"
+    @click="dismissKeyboard"
     style="
       padding-top: max(env(safe-area-inset-top), 1.5rem);
       padding-bottom: 1.5rem;
     "
   >
+    <div>
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <router-link
+          to="/editor"
+          class="bg-white text-secondary rounded-xl shadow-lg p-3 hover:shadow-xl hover:scale-105 transition-all group"
+        >
+          <h3 class="font-bold mb-1">Take Notes</h3>
+          <p class="text-xs opacity-90">Start capturing ideas</p>
+        </router-link>
+
+        <router-link
+          v-if="hasCanvasCourses"
+          to="/canvas"
+          class="bg-white text-secondary rounded-xl shadow-lg p-3 hover:shadow-xl hover:scale-105 transition-all group"
+        >
+          <h3 class="font-bold mb-1">Canvas</h3>
+          <p class="text-xs opacity-90">Grades & assignments</p>
+        </router-link>
+
+        <router-link
+          to="/learning-center"
+          class="bg-white text-secondary rounded-xl shadow-lg p-3 hover:shadow-xl hover:scale-105 transition-all group"
+        >
+          <h3 class="font-bold mb-1">Learning Center</h3>
+          <p class="text-xs opacity-90">Watch study tips</p>
+        </router-link>
+
+        <router-link
+          to="/ai-chat"
+          class="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl shadow-lg p-3 hover:shadow-xl hover:scale-105 transition-all group text-left relative overflow-hidden animate-shimmer block"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent shimmer-effect pointer-events-none"
+          ></div>
+
+          <h3 class="font-bold">AI Chat</h3>
+          <p class="text-xs opacity-90 relative">Ask anything</p>
+        </router-link>
+      </div>
+    </div>
     <div class="max-w-6xl mx-auto space-y-6">
       <!-- Profile Section -->
       <div>
@@ -23,15 +64,13 @@
               <h3 class="text-xl font-bold text-gray-900">
                 {{ authStore.userDisplayName }}
               </h3>
-              <p class="text-sm text-gray-600">{{ authStore.user?.email }}</p>
             </div>
-            <button
-              v-if="!hasCanvasCourses"
-              @click="showCanvasSetup = true"
-              class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all text-sm font-medium shadow-md hover:shadow-lg"
+            <router-link
+              to="/settings"
+              class="flex items-center gap-2 px-4 py-2 text-gray-700 rounded-lg transition-all text-sm font-medium"
             >
               <svg
-                class="w-4 h-4"
+                class="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -40,11 +79,16 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                ></path>
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
               </svg>
-              Setup Canvas
-            </button>
+            </router-link>
           </div>
 
           <!-- Progress Bar -->
@@ -68,8 +112,23 @@
           <!-- Stats Grid -->
           <div class="grid grid-cols-2 gap-4">
             <div class="text-center p-3 bg-gray-50 rounded-lg">
-              <div class="text-xl font-bold text-blue-600">{{ xp }}</div>
-              <div class="text-xs text-gray-600">Total XP</div>
+              <div class="flex items-center justify-center gap-1">
+                <svg
+                  class="w-5 h-5 text-orange-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <div class="text-xl font-bold text-orange-600">
+                  {{ currentStreak }}
+                </div>
+              </div>
+              <div class="text-xs text-gray-600">Day Streak</div>
             </div>
             <div class="text-center p-3 bg-gray-50 rounded-lg">
               <div class="text-xl font-bold text-green-600">
@@ -81,48 +140,8 @@
         </div>
       </div>
 
-      <!-- My Classes (Canvas Integration) -->
-      <div v-if="hasCanvasCourses">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-semibold text-gray-900">My Classes</h2>
-          <div class="flex items-center gap-2">
-            <button
-              @click="showCanvasSetup = true"
-              class="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                ></path>
-              </svg>
-              Re-sync
-            </button>
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-lg p-5">
-          <div class="flex flex-wrap gap-2">
-            <router-link
-              v-for="course in canvasCourses"
-              :key="course.id"
-              :to="{ name: 'editor', query: { subject: course.name } }"
-              class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all text-sm font-medium shadow-md hover:shadow-lg"
-            >
-              {{ course.name }}
-            </router-link>
-          </div>
-        </div>
-      </div>
-
       <!-- Canvas Setup Prompt (if not set up) -->
-      <div v-else-if="!canvasSetupCompleted">
+      <div v-if="!canvasSetupCompleted">
         <div
           class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-6 text-white"
         >
@@ -161,90 +180,10 @@
         </div>
       </div>
 
+      <!-- Quick Actions -->
+
       <!-- Due Soon Widget (Canvas Assignments) -->
       <DueSoonWidget v-if="hasCanvasCourses" />
-
-      <!-- Quick Actions -->
-      <div>
-        <h2 class="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <router-link
-            to="/editor"
-            class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
-          >
-            <Icons name="notes" class="w-10 h-10 mb-2" />
-            <h3 class="font-bold mb-1">Take Notes</h3>
-            <p class="text-xs opacity-90">Start capturing ideas</p>
-          </router-link>
-
-          <router-link
-            to="/flashcards"
-            class="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
-          >
-            <Icons name="flashcard" class="w-10 h-10 mb-2" />
-            <h3 class="font-bold mb-1">Flashcards</h3>
-            <p class="text-xs opacity-90">Review your cards</p>
-          </router-link>
-
-          <router-link
-            to="/focus"
-            class="bg-gradient-to-br from-cyan-500 to-teal-500 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
-          >
-            <Icons name="timer" class="w-10 h-10 mb-2" />
-            <h3 class="font-bold mb-1">Focus Timer</h3>
-            <p class="text-xs opacity-90">Start a session</p>
-          </router-link>
-
-          <router-link
-            v-if="hasCanvasCourses"
-            to="/canvas"
-            class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
-          >
-            <svg
-              class="w-10 h-10 mb-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-              ></path>
-            </svg>
-            <h3 class="font-bold mb-1">Canvas</h3>
-            <p class="text-xs opacity-90">Grades & assignments</p>
-          </router-link>
-
-          <router-link
-            to="/learning-center"
-            class="bg-gradient-to-br from-orange-500 to-red-500 text-white rounded-xl shadow-lg p-5 hover:shadow-xl hover:scale-105 transition-all group"
-          >
-            <svg
-              class="w-10 h-10 mb-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <h3 class="font-bold mb-1">Learning Center</h3>
-            <p class="text-xs opacity-90">Watch study tips</p>
-          </router-link>
-        </div>
-      </div>
     </div>
 
     <!-- Canvas Setup Modal -->
@@ -264,6 +203,7 @@ import { useAuthStore } from "../stores/auth";
 import { useSettingsStore } from "../stores/settings";
 import Icons from "../components/Icons.vue";
 import DueSoonWidget from "../components/DueSoonWidget.vue";
+import { Keyboard } from "@capacitor/keyboard";
 
 // Lazy load Canvas modal only when needed
 const CanvasSetupModal = defineAsyncComponent(
@@ -300,6 +240,36 @@ const canvasSetupCompleted = computed(
   () => settingsStore.settings.canvasSetupCompleted
 );
 
+function dismissKeyboard(event?: Event) {
+  const target = event?.target as HTMLElement | undefined;
+  // If tapping on inputs or interactive controls, do nothing
+  if (
+    target &&
+    target.closest(
+      'input, textarea, [contenteditable="true"], select, .ql-editor'
+    )
+  ) {
+    return;
+  }
+  const active = document.activeElement as HTMLElement | null;
+  if (
+    active &&
+    (active.tagName === "INPUT" ||
+      active.tagName === "TEXTAREA" ||
+      active.isContentEditable ||
+      active.tagName === "SELECT")
+  ) {
+    active.blur();
+  }
+  // Try Capacitor keyboard hide when available
+  try {
+    // @ts-ignore - gracefully ignore if not on a device
+    Keyboard.hide && Keyboard.hide();
+  } catch (_) {
+    // no-op
+  }
+}
+
 function handleCanvasSkip() {
   showCanvasSetup.value = false;
   // Don't mark as completed if skipped - user might want to set it up later
@@ -310,6 +280,11 @@ function handleCanvasSuccess() {
 }
 
 onMounted(async () => {
+  try {
+    // @ts-ignore optional API; safe to call if available in host
+    Keyboard.setScroll({ isDisabled: true }); // prevent viewport jump; improves blur reliability
+  } catch (_) {}
+
   // Load user data in background - no blocking
   gamificationStore.loadUserData();
   settingsStore.loadSettings();
@@ -326,3 +301,18 @@ onMounted(async () => {
   }, 1000);
 });
 </script>
+
+<style scoped>
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-effect {
+  animation: shimmer 3s infinite;
+}
+</style>

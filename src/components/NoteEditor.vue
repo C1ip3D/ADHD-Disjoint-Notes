@@ -4,9 +4,13 @@
     <div
       class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 border border-gray-200/50"
     >
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4"
+      >
         <div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-blue-600">Create Note</h1>
+          <h1 class="text-2xl sm:text-3xl font-bold text-blue-600">
+            Create Note
+          </h1>
           <p class="text-gray-500 text-xs sm:text-sm mt-1">
             Capture your thoughts with text or images
           </p>
@@ -18,7 +22,7 @@
             <button
               @click="activeTab = 'write'"
               :class="[
-                'flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all',
+                'flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-s sm:text-sm font-medium transition-all',
                 activeTab === 'write'
                   ? 'bg-white text-blue-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900',
@@ -29,7 +33,7 @@
             <button
               @click="activeTab = 'image'"
               :class="[
-                'flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all',
+                'flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-s sm:text-sm font-medium transition-all',
                 activeTab === 'image'
                   ? 'bg-white text-blue-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900',
@@ -37,23 +41,15 @@
             >
               Image
             </button>
-            <button
-              @click="activeTab = 'preview'"
-              :class="[
-                'flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all',
-                activeTab === 'preview'
-                  ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900',
-              ]"
-            >
-              Preview
-            </button>
           </div>
         </div>
       </div>
 
       <!-- Subject Selector -->
-      <SubjectSelector v-model:selectedSubject="selectedSubject" :noteContent="noteContent" />
+      <SubjectSelector
+        v-model:selectedSubject="selectedSubject"
+        :noteContent="noteContent"
+      />
     </div>
 
     <!-- Editor Area -->
@@ -61,11 +57,12 @@
       class="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden"
     >
       <!-- Text Editor Tab -->
-      <div v-show="activeTab === 'write'" class="p-3 sm:p-6">
-        <textarea
-          v-model="noteContent"
-          @input="autoSave"
-          placeholder="Start typing your notes here... You can use markdown formatting.
+      <Transition name="bounce" mode="out-in">
+        <div v-if="activeTab === 'write'" key="write" class="p-3 sm:p-6">
+          <textarea
+            v-model="noteContent"
+            @input="autoSave"
+            placeholder="Start typing your notes here... You can use markdown formatting.
 
 # Heading 1
 ## Heading 2
@@ -73,44 +70,20 @@
 - List item
 1. Numbered list
 [Link](url)"
-          class="w-full h-[400px] sm:h-[500px] p-3 sm:p-6 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm sm:text-base transition-all"
-          style="outline: none"
-        />
-      </div>
-
-      <!-- Image Upload Tab -->
-      <div v-show="activeTab === 'image'" class="p-3 sm:p-6">
-        <MobileImageUpload v-if="isNativePlatform" @text-extracted="handleTextExtracted" />
-        <ImageUpload v-else @text-extracted="handleTextExtracted" />
-      </div>
-
-      <!-- Preview Tab -->
-      <div v-show="activeTab === 'preview'" class="p-3 sm:p-6">
-        <div
-          v-if="noteContent.trim()"
-          v-html="renderedMarkdown"
-          class="prose prose-sm sm:prose-lg max-w-none p-3 sm:p-6 bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-xl sm:rounded-2xl min-h-[400px] sm:min-h-[500px] border-2 border-gray-200"
-        ></div>
-        <div v-else class="flex items-center justify-center h-[400px] sm:h-[500px] text-gray-400">
-          <div class="text-center px-4">
-            <svg
-              class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              ></path>
-            </svg>
-            <p class="text-base sm:text-lg font-medium">Nothing to preview yet</p>
-            <p class="text-xs sm:text-sm mt-1">Start writing to see a preview</p>
-          </div>
+            class="w-full h-[400px] sm:h-[500px] p-3 sm:p-6 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm sm:text-base transition-all"
+            style="outline: none"
+          />
         </div>
-      </div>
+
+        <!-- Image Upload Tab -->
+        <div v-else-if="activeTab === 'image'" key="image" class="p-3 sm:p-6">
+          <MobileImageUpload
+            v-if="isNativePlatform"
+            @text-extracted="handleTextExtracted"
+          />
+          <ImageUpload v-else @text-extracted="handleTextExtracted" />
+        </div>
+      </Transition>
     </div>
 
     <!-- Action Bar -->
@@ -128,7 +101,10 @@
             ></div>
             Saving...
           </span>
-          <span v-else-if="lastSaved" class="flex items-center gap-2 text-green-600">
+          <span
+            v-else-if="lastSaved"
+            class="flex items-center gap-2 text-green-600"
+          >
             <svg
               class="w-3 h-3 sm:w-4 sm:h-4"
               fill="none"
@@ -171,24 +147,11 @@
             Clear
           </button>
           <button
-            @click="() => saveNote(false)"
-            :disabled="!noteContent.trim()"
-            class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl hover:from-cyan-500 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base"
+            @click="saveNote"
+            :disabled="!noteContent.trim() || isSaving"
+            class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-2.5 bg-[#266DD3] text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base"
           >
-            <svg
-              class="w-4 h-4 sm:w-5 sm:h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-            Save Note
+            Save
           </button>
         </div>
       </div>
@@ -197,8 +160,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { marked } from "marked";
+import { ref, onMounted, onUnmounted } from "vue";
 import { Capacitor } from "@capacitor/core";
 import { useNotesStore } from "../stores/notes";
 import SubjectSelector from "./SubjectSelector.vue";
@@ -209,32 +171,66 @@ const notesStore = useNotesStore();
 
 const noteContent = ref("");
 const selectedSubject = ref("General");
-const activeTab = ref<"write" | "image" | "preview">("write");
+const activeTab = ref<"write" | "image">("write");
 const isSaving = ref(false);
 const lastSaved = ref<Date | null>(null);
 const autoSaveTimeout = ref<NodeJS.Timeout | null>(null);
 const isNativePlatform = Capacitor.isNativePlatform();
-
-const renderedMarkdown = computed(() => {
-  return marked(noteContent.value);
-});
+const hasPendingDraft = ref(false);
 
 function autoSave() {
   if (autoSaveTimeout.value) {
     clearTimeout(autoSaveTimeout.value);
   }
 
-  autoSaveTimeout.value = setTimeout(async () => {
+  autoSaveTimeout.value = setTimeout(() => {
     if (noteContent.value.trim()) {
-      await saveNote(true);
+      // Save to localStorage only (no database upload)
+      localStorage.setItem("note-draft", noteContent.value);
+      localStorage.setItem("note-draft-subject", selectedSubject.value);
+      hasPendingDraft.value = true;
+      lastSaved.value = new Date();
     }
   }, 2000); // Auto-save after 2 seconds of inactivity
 }
 
-async function saveNote(isAutoSave = false) {
-  if (!noteContent.value.trim()) return;
+async function saveNote() {
+  const content = noteContent.value.trim();
+  if (!content) return;
+
+  // Prevent duplicate saves if already saving
+  if (isSaving.value) return;
 
   isSaving.value = true;
+
+  try {
+    // Upload to Firebase database
+    await notesStore.addNote({
+      content,
+      subject: selectedSubject.value,
+      timestamp: new Date(),
+      format: "markdown",
+    });
+
+    // Clear the note and draft after successful save
+    noteContent.value = "";
+    lastSaved.value = null;
+    activeTab.value = "write";
+    hasPendingDraft.value = false;
+
+    // Clear localStorage draft
+    localStorage.removeItem("note-draft");
+    localStorage.removeItem("note-draft-subject");
+  } catch (error) {
+    console.error("Error saving note:", error);
+  } finally {
+    isSaving.value = false;
+  }
+}
+
+async function savePendingDraft() {
+  // Called when navigating away - saves any pending draft to database
+  if (!hasPendingDraft.value || !noteContent.value.trim()) return;
 
   try {
     await notesStore.addNote({
@@ -244,17 +240,12 @@ async function saveNote(isAutoSave = false) {
       format: "markdown",
     });
 
-    if (!isAutoSave) {
-      noteContent.value = "";
-      lastSaved.value = null;
-      activeTab.value = "write";
-    } else {
-      lastSaved.value = new Date();
-    }
+    // Clear draft after successful save
+    localStorage.removeItem("note-draft");
+    localStorage.removeItem("note-draft-subject");
+    hasPendingDraft.value = false;
   } catch (error) {
-    console.error("Error saving note:", error);
-  } finally {
-    isSaving.value = false;
+    console.error("Error saving pending draft:", error);
   }
 }
 
@@ -262,6 +253,9 @@ function clearNote() {
   if (confirm("Are you sure you want to clear this note?")) {
     noteContent.value = "";
     lastSaved.value = null;
+    hasPendingDraft.value = false;
+    localStorage.removeItem("note-draft");
+    localStorage.removeItem("note-draft-subject");
   }
 }
 
@@ -288,19 +282,61 @@ function formatTime(date: Date): string {
 onMounted(() => {
   // Load any existing draft from localStorage
   const draft = localStorage.getItem("note-draft");
+  const draftSubject = localStorage.getItem("note-draft-subject");
+
   if (draft) {
     noteContent.value = draft;
+    hasPendingDraft.value = true;
+  }
+
+  if (draftSubject) {
+    selectedSubject.value = draftSubject;
   }
 });
 
-onUnmounted(() => {
-  // Save draft to localStorage
-  if (noteContent.value.trim()) {
-    localStorage.setItem("note-draft", noteContent.value);
-  }
-
+onUnmounted(async () => {
+  // Clear any pending auto-save timeout
   if (autoSaveTimeout.value) {
     clearTimeout(autoSaveTimeout.value);
   }
+
+  // Save pending draft to database when navigating away
+  await savePendingDraft();
 });
 </script>
+
+<style scoped>
+/* Bounce transition effects */
+.bounce-enter-active {
+  animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.bounce-leave-active {
+  animation: bounce-out 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.9) translateY(10px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.02) translateY(-5px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95) translateY(-10px);
+    opacity: 0;
+  }
+}
+</style>

@@ -18,7 +18,7 @@
         <button
           @click="handleSync"
           :disabled="loading"
-          class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-md hover:shadow-lg"
+          class="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-md hover:shadow-lg"
         >
           <svg
             class="w-5 h-5"
@@ -34,7 +34,6 @@
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             ></path>
           </svg>
-          {{ loading ? "Syncing..." : "Sync" }}
         </button>
       </div>
 
@@ -119,24 +118,19 @@
             </select>
 
             <!-- Status Filter -->
-            <div class="flex gap-2 flex-wrap">
-              <button
+            <select
+              v-model="selectedStatus"
+              class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+            >
+              <option
                 v-for="status in statusOptions"
                 :key="status.value"
-                @click="selectedStatus = status.value"
-                :class="[
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                  selectedStatus === status.value
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-                ]"
+                :value="status.value"
               >
                 {{ status.label }}
-                <span v-if="status.count > 0" class="ml-1 text-xs opacity-75"
-                  >({{ status.count }})</span
-                >
-              </button>
-            </div>
+                <span v-if="status.count > 0">({{ status.count }})</span>
+              </option>
+            </select>
           </div>
         </div>
 
@@ -159,7 +153,7 @@
               <!-- Grade Display -->
               <div class="flex items-end gap-2 mb-3">
                 <div class="text-3xl font-bold text-blue-600">
-                  {{ grade.current_grade || "N/A" }}
+                  {{ getLetterGrade(grade.current_score) }}
                 </div>
                 <div
                   v-if="grade.current_score !== null"
@@ -561,6 +555,24 @@ function getDueDateBadgeClass(dateString: string | null): string {
   if (diffDays === 0) return "bg-orange-100 text-orange-700";
   if (diffDays <= 2) return "bg-yellow-100 text-yellow-700";
   return "bg-blue-100 text-blue-700";
+}
+
+function getLetterGrade(score: number | null): string {
+  if (score === null) return "N/A";
+
+  if (score >= 97) return "A+";
+  if (score >= 93) return "A";
+  if (score >= 90) return "A-";
+  if (score >= 87) return "B+";
+  if (score >= 83) return "B";
+  if (score >= 80) return "B-";
+  if (score >= 77) return "C+";
+  if (score >= 73) return "C";
+  if (score >= 70) return "C-";
+  if (score >= 67) return "D+";
+  if (score >= 63) return "D";
+  if (score >= 60) return "D-";
+  return "F";
 }
 
 function getGradeColor(score: number): string {

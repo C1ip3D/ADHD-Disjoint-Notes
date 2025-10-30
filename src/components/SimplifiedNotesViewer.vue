@@ -38,7 +38,7 @@
           <button
             @click="exportAsPDF"
             :disabled="isExporting"
-            class="px-6 py-3 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all font-medium shadow-lg flex items-center gap-2 disabled:opacity-50"
+            class="px-6 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all font-medium shadow-lg flex items-center gap-2 disabled:opacity-50"
           >
             <svg
               class="w-5 h-5"
@@ -289,28 +289,28 @@ onMounted(() => {
 /* ULTRA CLEAN READABLE FORMATTING WITH STRUCTURE */
 .content-display {
   color: #1f2937;
-  font-size: 1.25rem;
-  line-height: 2.25;
+  font-size: 1rem;
+  line-height: 1.75;
   letter-spacing: 0.01em;
 }
 
 /* Paragraphs - Good spacing */
 .content-display :deep(p) {
-  margin-bottom: 2rem;
-  font-size: 1.25rem;
-  line-height: 2.25;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.75;
   color: #374151;
 }
 
 /* Headings - Clear and prominent */
 .content-display :deep(h2) {
-  margin-top: 3.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #1e40af;
   border-bottom: 3px solid #3b82f6;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
   padding-top: 0.5rem;
   background: linear-gradient(to right, #eff6ff, transparent);
   padding-left: 1rem;
@@ -318,9 +318,9 @@ onMounted(() => {
 }
 
 .content-display :deep(h3) {
-  margin-top: 2.5rem;
-  margin-bottom: 1.25rem;
-  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1f2937;
 }
@@ -341,10 +341,10 @@ onMounted(() => {
 }
 
 .content-display :deep(li) {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-  line-height: 2;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.75;
   color: #374151;
   padding-left: 0.5rem;
 }
@@ -386,11 +386,11 @@ onMounted(() => {
 .content-display :deep(blockquote) {
   border-left: 5px solid #3b82f6;
   background: linear-gradient(to right, #eff6ff, transparent);
-  padding: 1.5rem 2rem;
-  margin: 2.5rem 0;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
   color: #1e40af;
-  font-size: 1.25rem;
-  line-height: 2;
+  font-size: 1rem;
+  line-height: 1.75;
   border-radius: 0.5rem;
   font-weight: 500;
 }

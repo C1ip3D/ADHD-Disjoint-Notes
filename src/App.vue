@@ -2,16 +2,24 @@
   <!-- Initial Loading Screen -->
   <LoadingSpinner v-if="isInitializing" fullscreen text="Loading Focusly..." />
 
-  <div v-else class="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50">
+  <div
+    v-else
+    class="h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50"
+    @click="dismissKeyboard"
+  >
     <!-- Route Loading Bar -->
     <Transition name="loading-bar">
       <div v-if="isRouteLoading" class="fixed top-0 left-0 right-0 z-[60]">
-        <div class="h-1 bg-gradient-to-r from-cyan-400 to-blue-500 animate-progress"></div>
+        <div
+          class="h-1 bg-gradient-to-r from-cyan-400 to-blue-500 animate-progress"
+        ></div>
       </div>
     </Transition>
 
     <!-- Main Content -->
-    <main class="h-full overflow-y-auto transition-all duration-300 pb-16 md:pb-0">
+    <main
+      class="h-full overflow-y-auto transition-all duration-300 pb-16 md:pb-0"
+    >
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -30,9 +38,16 @@
         <button
           @click="toggleNotesMenu"
           class="flex flex-col items-center justify-center flex-1 py-2 transition-colors relative"
-          :class="isNotesActive ? 'text-white' : 'text-gray-400 hover:text-white'"
+          :class="
+            isNotesActive ? 'text-white' : 'text-gray-400 hover:text-white'
+          "
         >
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -47,9 +62,18 @@
         <router-link
           to="/dashboard"
           class="flex flex-col items-center justify-center flex-1 py-2 transition-colors"
-          :class="$route.path === '/dashboard' ? 'text-white' : 'text-gray-400 hover:text-white'"
+          :class="
+            $route.path === '/dashboard'
+              ? 'text-white'
+              : 'text-gray-400 hover:text-white'
+          "
         >
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -64,9 +88,16 @@
         <button
           @click="toggleStudyMenu"
           class="flex flex-col items-center justify-center flex-1 py-2 transition-colors relative"
-          :class="isStudyActive ? 'text-white' : 'text-gray-400 hover:text-white'"
+          :class="
+            isStudyActive ? 'text-white' : 'text-gray-400 hover:text-white'
+          "
         >
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -75,12 +106,6 @@
             />
           </svg>
           <span class="text-xs mt-1">Study</span>
-          <span
-            v-if="dueFlashcardsCount > 0"
-            class="absolute top-1 right-3 bg-red-500 text-white text-[9px] font-bold rounded-full h-4 min-w-[16px] flex items-center justify-center px-1"
-          >
-            {{ dueFlashcardsCount > 99 ? "99+" : dueFlashcardsCount }}
-          </span>
         </button>
       </div>
     </nav>
@@ -103,7 +128,12 @@
               @click="showNotesMenu = false"
               class="flex items-center gap-4 px-4 py-4 text-white hover:bg-gray-700 rounded-xl transition-colors"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -122,7 +152,12 @@
               @click="showNotesMenu = false"
               class="flex items-center gap-4 px-4 py-4 text-white hover:bg-gray-700 rounded-xl transition-colors"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -133,25 +168,6 @@
               <div>
                 <div class="font-semibold">Your Notes</div>
                 <div class="text-xs text-gray-400">View all notes</div>
-              </div>
-            </router-link>
-
-            <router-link
-              to="/merge"
-              @click="showNotesMenu = false"
-              class="flex items-center gap-4 px-4 py-4 text-white hover:bg-gray-700 rounded-xl transition-colors"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
-              </svg>
-              <div>
-                <div class="font-semibold">AI Analyze</div>
-                <div class="text-xs text-gray-400">Get AI insights</div>
               </div>
             </router-link>
           </div>
@@ -173,28 +189,29 @@
         >
           <div class="space-y-2">
             <router-link
-              to="/flashcards"
+              to="/learning-center"
               @click="showStudyMenu = false"
               class="flex items-center gap-4 px-4 py-4 text-white hover:bg-gray-700 rounded-xl transition-colors"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                 />
               </svg>
               <div class="flex-1">
-                <div class="font-semibold">Flashcards</div>
-                <div class="text-xs text-gray-400">Study with flashcards</div>
+                <div class="font-semibold">Learning Center</div>
+                <div class="text-xs text-gray-400">
+                  AI study tools & resources
+                </div>
               </div>
-              <span
-                v-if="dueFlashcardsCount > 0"
-                class="bg-red-500 text-white text-xs font-bold rounded-full h-6 min-w-[24px] flex items-center justify-center px-2"
-              >
-                {{ dueFlashcardsCount }}
-              </span>
             </router-link>
 
             <router-link
@@ -202,7 +219,12 @@
               @click="showStudyMenu = false"
               class="flex items-center gap-4 px-4 py-4 text-white hover:bg-gray-700 rounded-xl transition-colors"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -232,7 +254,9 @@
           class="absolute bottom-16 left-0 right-0 bg-white rounded-t-3xl shadow-2xl p-6"
           style="padding-bottom: env(safe-area-inset-bottom)"
         >
-          <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200">
+          <div
+            class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200"
+          >
             <div
               class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg"
             >
@@ -241,7 +265,9 @@
               </span>
             </div>
             <div>
-              <p class="text-lg font-semibold text-gray-900">{{ authStore.userDisplayName }}</p>
+              <p class="text-lg font-semibold text-gray-900">
+                {{ authStore.userDisplayName }}
+              </p>
               <p class="text-sm text-gray-500">{{ authStore.user?.email }}</p>
             </div>
           </div>
@@ -252,7 +278,12 @@
               @click="showMobileUserMenu = false"
               class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -268,7 +299,12 @@
               @click="showMobileUserMenu = false"
               class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -283,7 +319,12 @@
               @click="handleLogout"
               class="flex items-center gap-3 w-full px-4 py-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -309,23 +350,22 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { RouterLink, RouterView, useRouter } from "vue-router";
+import { Capacitor } from "@capacitor/core";
+import { Keyboard } from "@capacitor/keyboard";
 import { useAuthStore } from "./stores/auth";
-import { useFlashcardsStore } from "./stores/flashcards";
 import AIChatAssistant from "./components/AIChatAssistant.vue";
 import XPBadge from "./components/XPBadge.vue";
 import LevelUpModal from "./components/LevelUpModal.vue";
 import LoadingSpinner from "./components/LoadingSpinner.vue";
 
 const authStore = useAuthStore();
-const flashcardsStore = useFlashcardsStore();
 const router = useRouter();
 const showMobileUserMenu = ref(false);
 const showNotesMenu = ref(false);
 const showStudyMenu = ref(false);
 const isInitializing = ref(true);
 const isRouteLoading = ref(false);
-
-const dueFlashcardsCount = computed(() => flashcardsStore.dueFlashcards.length);
+const isNativePlatform = Capacitor.isNativePlatform();
 
 // Check if current route is in Notes section
 const isNotesActive = computed(() => {
@@ -336,8 +376,40 @@ const isNotesActive = computed(() => {
 // Check if current route is in Study section
 const isStudyActive = computed(() => {
   const path = router.currentRoute.value.path;
-  return path === "/flashcards" || path === "/focus";
+  return path === "/learning-center" || path === "/focus";
 });
+
+// Global keyboard dismissal
+function dismissKeyboard(event?: Event) {
+  const target = event?.target as HTMLElement | undefined;
+  // If clicking on inputs or interactive controls, do nothing
+  if (
+    target &&
+    target.closest(
+      'input, textarea, [contenteditable="true"], select, button, a, .ql-editor'
+    )
+  ) {
+    return;
+  }
+  const active = document.activeElement as HTMLElement | null;
+  if (
+    active &&
+    (active.tagName === "INPUT" ||
+      active.tagName === "TEXTAREA" ||
+      active.isContentEditable ||
+      active.tagName === "SELECT")
+  ) {
+    active.blur();
+  }
+  // Try Capacitor keyboard hide when available
+  if (isNativePlatform) {
+    try {
+      Keyboard.hide();
+    } catch (error) {
+      // Keyboard plugin not available or already hidden
+    }
+  }
+}
 
 function toggleNotesMenu() {
   showNotesMenu.value = !showNotesMenu.value;
@@ -363,6 +435,17 @@ async function handleLogout() {
 }
 
 onMounted(async () => {
+  // Configure keyboard behavior for native platforms
+  if (isNativePlatform) {
+    try {
+      // Prevent viewport jump; improves blur reliability
+      Keyboard.setScroll({ isDisabled: true });
+    } catch (error) {
+      // Keyboard plugin not available
+      console.log("Keyboard configuration not available");
+    }
+  }
+
   // Setup route loading indicator
   router.beforeEach((to, from, next) => {
     isRouteLoading.value = true;
@@ -384,11 +467,6 @@ onMounted(async () => {
     // Timeout after 2 seconds max
     setTimeout(resolve, 2000);
   });
-
-  // Load flashcards for badge count
-  if (authStore.isAuthenticated) {
-    flashcardsStore.fetchFlashcards();
-  }
 
   // Hide loading screen with a slight delay for smooth transition
   setTimeout(() => {

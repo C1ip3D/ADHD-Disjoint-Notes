@@ -64,7 +64,10 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
 
   const averageSuccessRate = computed(() => {
     if (flashcards.value.length === 0) return 0;
-    const sum = flashcards.value.reduce((acc, card) => acc + card.successRate, 0);
+    const sum = flashcards.value.reduce(
+      (acc, card) => acc + card.successRate,
+      0
+    );
     return Math.round((sum / flashcards.value.length) * 100);
   });
 
@@ -78,7 +81,11 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
     try {
       const userId = authStore.user.uid;
       const flashcardsRef = collection(db, "flashcards");
-      const q = query(flashcardsRef, where("userId", "==", userId), orderBy("nextReview", "asc"));
+      const q = query(
+        flashcardsRef,
+        where("userId", "==", userId),
+        orderBy("nextReview", "asc")
+      );
       const querySnapshot = await getDocs(q);
 
       flashcards.value = querySnapshot.docs.map((doc) => {
@@ -109,7 +116,9 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
   }
 
   // Create flashcard
-  async function createFlashcard(flashcard: Omit<Flashcard, "id" | "userId" | "createdAt">) {
+  async function createFlashcard(
+    flashcard: Omit<Flashcard, "id" | "userId" | "createdAt">
+  ) {
     if (!authStore.user) throw new Error("User not authenticated");
 
     loading.value = true;
@@ -117,21 +126,33 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
 
     try {
       const userId = authStore.user.uid;
-      const docRef = await addDoc(collection(db, "flashcards"), {
+
+      // Build document data, excluding undefined optional fields for Firebase
+      const docData: any = {
         userId,
         noteId: flashcard.noteId,
         term: flashcard.term,
         definition: flashcard.definition,
-        example: flashcard.example,
-        imageUrl: flashcard.imageUrl,
         difficulty: flashcard.difficulty || 3,
-        lastReviewed: flashcard.lastReviewed ? Timestamp.fromDate(flashcard.lastReviewed) : null,
+        lastReviewed: flashcard.lastReviewed
+          ? Timestamp.fromDate(flashcard.lastReviewed)
+          : null,
         nextReview: Timestamp.fromDate(flashcard.nextReview),
         successRate: flashcard.successRate || 0,
         reviewCount: flashcard.reviewCount || 0,
         consecutiveCorrect: flashcard.consecutiveCorrect || 0,
         createdAt: Timestamp.now(),
-      });
+      };
+
+      // Only add optional fields if they have values
+      if (flashcard.example) {
+        docData.example = flashcard.example;
+      }
+      if (flashcard.imageUrl) {
+        docData.imageUrl = flashcard.imageUrl;
+      }
+
+      const docRef = await addDoc(collection(db, "flashcards"), docData);
 
       const newCard: Flashcard = {
         id: docRef.id,
@@ -152,7 +173,11 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
   }
 
   // Update flashcard after review
-  async function updateFlashcardReview(cardId: string, correct: boolean, nextReviewMs: number) {
+  async function updateFlashcardReview(
+    cardId: string,
+    correct: boolean,
+    nextReviewMs: number
+  ) {
     if (!authStore.user) throw new Error("User not authenticated");
 
     try {
@@ -176,7 +201,8 @@ export const useFlashcardsStore = defineStore("flashcards", () => {
       // Update success rate
       const newReviewCount = card.reviewCount + 1;
       const newSuccessRate =
-        (card.successRate * card.reviewCount + (correct ? 1 : 0)) / newReviewCount;
+        (card.successRate * card.reviewCount + (correct ? 1 : 0)) /
+        newReviewCount;
 
       // Calculate next review date
       const nextReview = new Date(now.getTime() + nextReviewMs);

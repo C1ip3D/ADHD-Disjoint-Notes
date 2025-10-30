@@ -7,9 +7,13 @@
       <!-- App Logo -->
       <div class="mb-8 animate-fade-in">
         <img
-          src="/favicon.png"
+          src="/1024.png"
           alt="Focusly Logo"
           class="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-3xl shadow-2xl"
+          style="
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+          "
         />
       </div>
 
@@ -18,7 +22,9 @@
         class="text-5xl sm:text-7xl font-bold mb-6 animate-slide-up"
         style="animation-delay: 0.1s"
       >
-        <span class="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
+        <span
+          class="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent"
+        >
           Focusly
         </span>
       </h1>
@@ -62,7 +68,10 @@
       </button>
 
       <!-- Existing User Link -->
-      <p class="mt-6 text-sm text-gray-500 animate-slide-up" style="animation-delay: 0.5s">
+      <p
+        class="mt-6 text-sm text-gray-500 animate-slide-up"
+        style="animation-delay: 0.5s"
+      >
         Existing user?
         <button
           @click="handleLogin"

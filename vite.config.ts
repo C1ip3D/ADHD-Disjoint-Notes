@@ -30,18 +30,16 @@ export default defineConfig({
     minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console.logs in production
+        drop_console: true,
         drop_debugger: true,
       },
     },
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split vendor libraries (only actually used ones)
           firebase: ["firebase/app", "firebase/auth", "firebase/firestore"],
           "vue-vendor": ["vue", "vue-router", "pinia"],
           editor: ["marked", "html2canvas", "jspdf"],
-          openai: ["openai"],
         },
       },
     },

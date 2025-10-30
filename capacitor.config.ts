@@ -6,20 +6,15 @@ const config: CapacitorConfig = {
   webDir: "dist",
   server: {
     androidScheme: "https",
-    // Disable cleartext for security
     cleartext: false,
   },
   ios: {
-    // Use WKWebView optimizations for faster loading
-    contentInset: "automatic",
+    contentInset: "never",
     preferredContentMode: "mobile",
-    // Disable limitsNavigationsToAppBoundDomains for faster navigation
     limitsNavigationsToAppBoundDomains: false,
-    // Enable automatic scrolling
-    scrollEnabled: true,
+    scrollEnabled: false,
   },
   android: {
-    // Enable hardware acceleration
     allowMixedContent: false,
     captureInput: true,
   },
@@ -34,12 +29,13 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: "light",
-      backgroundColor: "#22D3EE",
+      backgroundColor: "#ffffff",
+      overlaysWebView: false,
     },
     SplashScreen: {
       launchShowDuration: 2000,
       launchAutoHide: true,
-      backgroundColor: "#22D3EE",
+      backgroundColor: "#266dd3",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
     },

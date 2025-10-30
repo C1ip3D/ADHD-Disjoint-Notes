@@ -42,6 +42,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/generate-flashcards",
+      name: "generate-flashcards",
+      component: () => import("../views/FlashcardGeneratorView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/flashcards",
       name: "flashcards",
       component: () => import("../views/FlashcardsView.vue"),
@@ -69,6 +75,18 @@ const router = createRouter({
       path: "/canvas",
       name: "canvas",
       component: () => import("../views/CanvasView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: () => import("../views/SettingsView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/ai-chat",
+      name: "ai-chat",
+      component: () => import("../views/AIChatView.vue"),
       meta: { requiresAuth: true },
     },
   ],

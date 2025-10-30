@@ -10,11 +10,12 @@
       <!-- Header -->
       <div class="bg-white rounded-xl shadow-lg p-6">
         <div class="flex items-center gap-4 mb-2">
-          <div
-            class="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center shadow-lg"
+          <router-link
+            to="/dashboard"
+            class="px-6 py-3 bg-[#C4E0F9] text-black rounded-xl hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
           >
             <svg
-              class="w-8 h-8 text-white"
+              class="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -23,16 +24,10 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
               ></path>
             </svg>
-          </div>
+          </router-link>
           <div>
             <h1 class="text-3xl font-bold text-gray-900">Learning Center</h1>
             <p class="text-sm text-gray-600">
@@ -53,7 +48,7 @@
           <!-- Video Thumbnail -->
           <div class="relative w-full" style="padding-bottom: 56.25%">
             <div
-              class="absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-500 to-red-600"
+              class="absolute inset-0 w-full h-full flex items-center justify-center bg-[#266DD3]"
             >
               <div
                 class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
@@ -126,27 +121,6 @@
       </Teleport>
 
       <!-- Back to Dashboard -->
-      <div class="flex justify-center pt-4">
-        <router-link
-          to="/dashboard"
-          class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all font-medium shadow-lg hover:shadow-xl flex items-center gap-2"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            ></path>
-          </svg>
-          Back to Dashboard
-        </router-link>
-      </div>
     </div>
   </div>
 </template>
@@ -164,33 +138,50 @@ interface Video {
 const videos = ref<Video[]>([
   {
     id: "1",
-    title: "Study Techniques for Success",
-    description:
-      "Learn effective study methods to improve retention and understanding.",
+    title: "How to take Math Notes",
+    description: "Learn quick metho",
     embedUrl:
       "https://drive.google.com/file/d/182J3ZOLN7sWy2F_MKUSp6hwq7yUtzYTF/preview",
   },
   {
     id: "2",
-    title: "Note-Taking Strategies",
-    description: "Master the art of taking organized and effective notes.",
+    title: "What is Focusly?",
+    description:
+      "Discover how Focusly helps you stay focused and study smarter.",
     embedUrl:
       "https://drive.google.com/file/d/1BuStehk5f5Zpg11ZRby2rh1UK1966E2g/preview",
   },
   {
     id: "3",
-    title: "Focus & Concentration Tips",
-    description: "Discover techniques to maintain focus during study sessions.",
+    title: "What is the optimal Study Time",
+    description:
+      "Find the best times and durations to study for maximum retention.",
     embedUrl:
       "https://drive.google.com/file/d/1hZFK7AlKlC6NdH3rl8ucpl_lAMUvFgEq/preview",
   },
   {
     id: "4",
-    title: "Time Management Essentials",
+    title: "How to take Science Notes",
     description:
-      "Learn how to manage your time effectively for better productivity.",
+      "Capture experiments and concepts effectively using structured notes.",
     embedUrl:
       "https://drive.google.com/file/d/1srfvPfp54G4HoTKCEoZM-WdZQHhS-kch/preview",
+  },
+  {
+    id: "5",
+    title: "How to take English Notes",
+    description:
+      "Learn to record themes, quotes, and ideas for essays efficiently.",
+    embedUrl:
+      "https://drive.google.com/file/d/1yi7-XHCTQlbRe-kyhJp0MgpZsLq5b0-z/preview",
+  },
+  {
+    id: "6",
+    title: "How to take History Notes",
+    description:
+      "Master timeline-based note-taking to connect events and causes easily.",
+    embedUrl:
+      "https://drive.google.com/file/d/1yvTvL7-ewqHBKBLcZNne_DPba7IOORHA/preview",
   },
 ]);
 

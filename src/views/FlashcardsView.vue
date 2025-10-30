@@ -1,7 +1,10 @@
 <template>
   <div
     class="flashcards-view min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 px-4"
-    style="padding-top: max(env(safe-area-inset-top), 1.5rem); padding-bottom: 1.5rem"
+    style="
+      padding-top: max(env(safe-area-inset-top), 1.5rem);
+      padding-bottom: 1.5rem;
+    "
   >
     <div class="max-w-6xl mx-auto space-y-6">
       <!-- Header -->
@@ -15,17 +18,21 @@
       </div>
 
       <!-- Stats Overview -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-white rounded-xl shadow-lg p-6">
           <div class="text-3xl font-bold text-purple-600">{{ totalCards }}</div>
           <div class="text-sm text-gray-600 mt-1">Total Cards</div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-6">
-          <div class="text-3xl font-bold text-orange-600">{{ dueCards.length }}</div>
+          <div class="text-3xl font-bold text-orange-600">
+            {{ dueCards.length }}
+          </div>
           <div class="text-sm text-gray-600 mt-1">Due Today</div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-6">
-          <div class="text-3xl font-bold text-green-600">{{ avgSuccessRate }}%</div>
+          <div class="text-3xl font-bold text-green-600">
+            {{ avgSuccessRate }}%
+          </div>
           <div class="text-sm text-gray-600 mt-1">Success Rate</div>
         </div>
         <div class="bg-white rounded-xl shadow-lg p-6">
@@ -42,7 +49,9 @@
         class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-xl p-8 text-white text-center"
       >
         <h2 class="text-2xl font-bold mb-2">Ready to Review?</h2>
-        <p class="mb-6">You have {{ dueCards.length }} cards waiting for you!</p>
+        <p class="mb-6">
+          You have {{ dueCards.length }} cards waiting for you!
+        </p>
         <button
           @click="startReview"
           class="px-8 py-3 bg-white text-purple-600 rounded-xl hover:bg-gray-100 transition-all font-medium shadow-lg"
@@ -62,10 +71,17 @@
           <p class="text-gray-600 mt-4">Loading flashcards...</p>
         </div>
 
-        <div v-else-if="totalCards === 0" class="bg-white rounded-xl shadow-lg p-12 text-center">
+        <div
+          v-else-if="totalCards === 0"
+          class="bg-white rounded-xl shadow-lg p-12 text-center"
+        >
           <Icons name="book" class="w-16 h-16 text-purple-300 mx-auto mb-4" />
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">No Flashcards Yet</h3>
-          <p class="text-gray-600 mb-6">Create flashcards from your notes to get started!</p>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            No Flashcards Yet
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Create flashcards from your notes to get started!
+          </p>
           <router-link
             to="/notes"
             class="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all font-medium"

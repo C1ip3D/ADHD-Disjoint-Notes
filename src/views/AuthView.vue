@@ -1,18 +1,23 @@
 <template>
   <div
     class="auth-view min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
-    style="padding-top: max(env(safe-area-inset-top), 2rem); padding-bottom: 2rem"
+    style="
+      padding-top: max(env(safe-area-inset-top), 2rem);
+      padding-bottom: 2rem;
+    "
   >
     <div class="max-w-md w-full">
       <!-- Logo and Title -->
       <div class="text-center mb-8">
         <img
-          src="/favicon.png"
+          src="/1024.png"
           alt="Focusly"
           class="mx-auto h-20 w-20 sm:h-24 sm:h-24 rounded-2xl shadow-xl mb-4"
         />
         <h1 class="text-3xl sm:text-4xl font-bold">
-          <span class="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
+          <span
+            class="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent"
+          >
             Focusly
           </span>
         </h1>
@@ -38,8 +43,8 @@
             class="flex-1 py-3 px-4 rounded-lg font-semibold transition-all"
             :class="
               activeTab === 'signup'
-                ? 'bg-white text-gray-900 shadow-md'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-black shadow-md'
+                : 'text-black hover:text-gray-900'
             "
           >
             Sign Up
@@ -47,9 +52,16 @@
         </div>
 
         <!-- Login Form -->
-        <form v-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-5">
+        <form
+          v-if="activeTab === 'login'"
+          @submit.prevent="handleLogin"
+          class="space-y-5"
+        >
           <div>
-            <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="login-email"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Email
             </label>
             <input
@@ -63,7 +75,10 @@
           </div>
 
           <div>
-            <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="login-password"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Password
             </label>
             <input
@@ -84,7 +99,9 @@
                 type="checkbox"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label for="remember" class="ml-2 block text-sm text-gray-700"> Remember me </label>
+              <label for="remember" class="ml-2 block text-sm text-gray-700">
+                Remember me
+              </label>
             </div>
             <button
               type="button"
@@ -96,7 +113,10 @@
           </div>
 
           <!-- Error Message -->
-          <div v-if="authStore.error" class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div
+            v-if="authStore.error"
+            class="bg-red-50 border border-red-200 rounded-xl p-4"
+          >
             <div class="flex items-start">
               <svg
                 class="w-5 h-5 text-red-400 mr-2 mt-0.5 flex-shrink-0"
@@ -118,9 +138,13 @@
           <button
             type="submit"
             :disabled="authStore.loading"
-            class="w-full py-4 px-6 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl font-bold text-lg hover:from-cyan-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+            class="w-full py-4 px-6 text-white rounded-xl font-bold text-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+            style="background-color: var(--color-primary)"
           >
-            <span v-if="authStore.loading" class="flex items-center justify-center">
+            <span
+              v-if="authStore.loading"
+              class="flex items-center justify-center"
+            >
               <svg
                 class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,14 +167,17 @@
               </svg>
               Signing in...
             </span>
-            <span v-else>Sign In</span>
+            <span v-else class="text-secondary bg-primary">Sign In</span>
           </button>
         </form>
 
         <!-- Signup Form -->
         <form v-else @submit.prevent="handleSignup" class="space-y-5">
           <div>
-            <label for="signup-name" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="signup-name"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Display Name <span class="text-gray-400">(optional)</span>
             </label>
             <input
@@ -163,7 +190,10 @@
           </div>
 
           <div>
-            <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="signup-email"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Email
             </label>
             <input
@@ -177,7 +207,10 @@
           </div>
 
           <div>
-            <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="signup-password"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Password
             </label>
             <input
@@ -192,7 +225,10 @@
           </div>
 
           <div>
-            <label for="signup-confirm" class="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              for="signup-confirm"
+              class="block text-sm font-medium text-gray-700 mb-2"
+            >
               Confirm Password
             </label>
             <input
@@ -215,14 +251,21 @@
             />
             <label for="terms" class="ml-2 block text-sm text-gray-700">
               I agree to the
-              <a href="#" class="text-blue-600 hover:text-blue-500 font-medium">Terms of Service</a>
+              <a href="#" class="text-blue-600 hover:text-blue-500 font-medium"
+                >Terms of Service</a
+              >
               and
-              <a href="#" class="text-blue-600 hover:text-blue-500 font-medium">Privacy Policy</a>
+              <a href="#" class="text-blue-600 hover:text-blue-500 font-medium"
+                >Privacy Policy</a
+              >
             </label>
           </div>
 
           <!-- Error Message -->
-          <div v-if="authStore.error" class="bg-red-50 border border-red-200 rounded-xl p-4">
+          <div
+            v-if="authStore.error"
+            class="bg-red-50 border border-red-200 rounded-xl p-4"
+          >
             <div class="flex items-start">
               <svg
                 class="w-5 h-5 text-red-400 mr-2 mt-0.5 flex-shrink-0"
@@ -244,9 +287,13 @@
           <button
             type="submit"
             :disabled="authStore.loading"
-            class="w-full py-4 px-6 bg-gradient-to-r from-cyan-400 to-blue-500 text-white rounded-xl font-bold text-lg hover:from-cyan-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+            class="w-full py-4 px-6 text-white rounded-xl font-bold text-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+            style="background-color: var(--color-primary)"
           >
-            <span v-if="authStore.loading" class="flex items-center justify-center">
+            <span
+              v-if="authStore.loading"
+              class="flex items-center justify-center"
+            >
               <svg
                 class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +316,7 @@
               </svg>
               Creating account...
             </span>
-            <span v-else>Create Account</span>
+            <span v-else class="text-black">Create Account</span>
           </button>
         </form>
       </div>
